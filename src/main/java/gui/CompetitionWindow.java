@@ -12,28 +12,26 @@ import java.util.List;
 /**
  * @author BS
  */
-public class CompetitionWindow extends JFrame implements ActionListener {
+public class CompetitionWindow extends JFrame implements ActionListener, ScoreChangeEvent {
 	private static final long serialVersionUID = 1L;
 	
-	private Game competition;
+	private Competition competition;
     private ColumnGraph columnGraph;
 
     // widgets
     private JButton runWarButton;
-    private JLabel warCounterDisplay;
-    private JCheckBox showBattleCheckBox;
-    private JTextField battlesPerGroupField;
-    private JTextField warriorsPerGroupField;
 
 	private boolean competitionRunning;
 
 	private JCheckBox startPausedCheckBox;
 
-    public CompetitionWindow(List<Player> players, GameConstants gameConstants) {
+	private Thread competitionThread;
+
+    public CompetitionWindow(Competition competition) {
         super("TNCC 2 - Alexey Shapovalov & Ido Heinemann");
         getContentPane().setLayout(new BorderLayout());
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        competition = new Game(players, gameConstants);
+        this.competition = competition;
         columnGraph = new ColumnGraph(competition.getGroupNames());
         getContentPane().add(columnGraph, BorderLayout.CENTER);
         // -------------
@@ -56,11 +54,22 @@ public class CompetitionWindow extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        new Thread(this::playUntilStopped).start();
+        if(competitionRunning){
+
+        }
+        else {
+            new Thread(this::playUntilStopped).start();
+            competitionRunning = true;
+        }
+
     }
 
     public void playUntilStopped(){
 
+    }
+
+    public void updateScore(int index, float value) {
+        columnGraph.addToValue(index, value);
     }
 
     /**
@@ -106,10 +115,6 @@ public class CompetitionWindow extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(this, "Error in configuration");
         }
         return false;
-    }
-
-    public void scoreChanged(String name, float addedValue, int groupIndex, int subIndex) {
-        columnGraph.addToValue(groupIndex, subIndex, addedValue);
     }
 
     public void actionPerformed(ActionEvent e) {
