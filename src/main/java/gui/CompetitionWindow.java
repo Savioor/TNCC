@@ -24,6 +24,7 @@ public class CompetitionWindow extends JFrame implements ActionListener, ScoreCh
     private JButton runWarButton;
 
 	private boolean competitionRunning;
+	private boolean competitionInterrupted;
 
 	private JCheckBox startPausedCheckBox;
 
@@ -37,6 +38,7 @@ public class CompetitionWindow extends JFrame implements ActionListener, ScoreCh
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.competition = competition;
         this.permutations = getAllPermutations(competition.getGroupNames().length - 1);
+        competitionInterrupted = false;
 
         columnGraph = new ColumnGraph(competition.getGroupNames());
         getContentPane().add(columnGraph, BorderLayout.CENTER);
@@ -63,7 +65,7 @@ public class CompetitionWindow extends JFrame implements ActionListener, ScoreCh
         if(competitionRunning){
             runWarButton.setText("<html><font color=red>Start!</font></html>");
             competitionRunning = false;
-            competitionThread.interrupt();
+            competitionInterrupted = true;
         }
         else {
             competitionThread = new Thread(this::playUntilStopped);
@@ -82,9 +84,14 @@ public class CompetitionWindow extends JFrame implements ActionListener, ScoreCh
             for (Integer i : winners){
                 updateScore(i, 1.0f / winners.size());
             }
+            if (competitionInterrupted){
+                competitionInterrupted = false;
+                return;
+            }
         }
         runWarButton.setText("<html><font color=red>Start!</font></html>");
         competitionRunning = false;
+        competitionInterrupted = false;
     }
 
     public List<List<Integer>> getAllPermutations(int n){

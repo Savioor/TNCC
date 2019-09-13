@@ -4,6 +4,8 @@ import java.awt.*;
 
 /**
  * @author BS
+ *
+ *
  */
 public class ColorHolder {
     private Color colors[];

@@ -1,3 +1,4 @@
+import bots.TurtleBot;
 import game.Competition;
 import game.GameConstants;
 import game.Player;
@@ -16,8 +17,11 @@ public class GUIGameRunner {
 
     public GUIGameRunner(){
         List<Player> playerList = new ArrayList<>();
-        playerList.add(new Player("p1", null, null));
-        playerList.add(new Player("p2", null, null));
+        playerList.add(new Player("p1", new TurtleBot(), new TurtleBot()));
+        playerList.add(new Player("p2", new TurtleBot(), new TurtleBot()));
+        playerList.add(new Player("p3", new TurtleBot(), new TurtleBot()));
+        playerList.add(new Player("p4", new TurtleBot(), new TurtleBot()));
+        playerList.add(new Player("p5", new TurtleBot(), new TurtleBot()));
         Competition c = new Competition(playerList);
         gameFrame = new CompetitionWindow(c);
         gameFrame.setVisible(true);
