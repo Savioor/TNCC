@@ -35,6 +35,14 @@ public class Game {
         return consts;
     }
 
+    public String[] getGroupNames() {
+        String[] names = new String[players.size()];
+        for (int i = 0; i < players.size(); i++) {
+            names[i] = players.get(i).getName();
+        }
+        return names;
+    }
+
     public enum Resources{
         GOLD,
         FOOD,
