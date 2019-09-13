@@ -60,7 +60,6 @@ public class CompetitionWindow extends JFrame implements ActionListener {
     }
 
     public void playUntilStopped(){
-        System.out.println("Not Implemented Yet");
 
     }
 
