@@ -15,7 +15,7 @@ public class Game {
     private GameConstants consts;
     private Logger gameLogger;
     private int turn;
-    private final long BOT_TIMEOUT = 100;
+    private final long BOT_TIMEOUT = 20;
 
     public Game(List<Player> players, GameConstants conts) {
         this.players = players;
@@ -92,6 +92,7 @@ public class Game {
             action = current.getAction(this);
             if (action.execute(this, current))
                 break;
+            gameLogger.warning(current.getName() + " executed Illegal action " + action.getName());
         }
 
         gameLogger.info(action.getName() + " was run by " + current.getName());
