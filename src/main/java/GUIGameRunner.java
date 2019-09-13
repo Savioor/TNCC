@@ -1,3 +1,4 @@
+import game.Competition;
 import game.GameConstants;
 import game.Player;
 import gui.CompetitionWindow;
@@ -17,7 +18,8 @@ public class GUIGameRunner {
         List<Player> playerList = new ArrayList<>();
         playerList.add(new Player("p1", null, null));
         playerList.add(new Player("p2", null, null));
-        gameFrame = new CompetitionWindow(playerList, new GameConstants());
+        Competition c = new Competition(playerList);
+        gameFrame = new CompetitionWindow(c);
         gameFrame.setVisible(true);
         gameFrame.pack();
     }

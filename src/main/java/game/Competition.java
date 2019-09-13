@@ -17,7 +17,18 @@ public class Competition {
 
     public List<Integer> runGame(List<Integer> order, GameConstants consts){
         current = new Game(clonePlayers(order), consts);
-
+        List<Player> winners;
+        while(true){
+            winners = current.executeCycle();
+            if (winners != null){
+                break;
+            }
+        }
+        List<Integer> winnerIds = new ArrayList<>();
+        for (Player p : winners){
+            winnerIds.add(getPlayerId(p));
+        }
+        return winnerIds;
     }
 
     public List<Player> clonePlayers(List<Integer> order){
@@ -25,24 +36,16 @@ public class Competition {
         for (Integer i : order){
             ret.add(players.get(i).clone());
         }
+        return ret;
     }
 
-    public Player getPlayerByNameOrId(String input){
-        Player ret = null;
-        try {
-            int ID = Integer.parseInt(input);
-            if (ID >= this.players.size() || ID < 0)
-                throw new NumberFormatException();
-            ret = this.players.get(ID);
-        } catch (NumberFormatException e){
-            for (Player p : this.players){
-                if (p.getName().equals(input)){
-                    ret = p;
-                    break;
-                }
+    public int getPlayerId(Player p){
+        for (int i = 0; i < players.size(); i++){
+            if (p.getName().equals(players.get(i).getName())){
+                return i;
             }
         }
-        return ret;
+        return -1;
     }
 
     public String[] getGroupNames(){

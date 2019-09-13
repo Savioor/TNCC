@@ -9,6 +9,7 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 /**
  * @author BS
@@ -28,11 +29,15 @@ public class CompetitionWindow extends JFrame implements ActionListener, ScoreCh
 
 	private Thread competitionThread;
 
+	private List<List<Integer>> permutations;
+
     public CompetitionWindow(Competition competition) {
         super("TNCC 2 - Alexey Shapovalov & Ido Heinemann");
         getContentPane().setLayout(new BorderLayout());
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.competition = competition;
+        this.permutations = getAllPermutations(competition.getGroupNames().length - 1);
+
         columnGraph = new ColumnGraph(competition.getGroupNames());
         getContentPane().add(columnGraph, BorderLayout.CENTER);
         // -------------
@@ -56,17 +61,52 @@ public class CompetitionWindow extends JFrame implements ActionListener, ScoreCh
     @Override
     public void actionPerformed(ActionEvent e) {
         if(competitionRunning){
-
+            runWarButton.setText("<html><font color=red>Start!</font></html>");
+            competitionRunning = false;
+            competitionThread.interrupt();
         }
         else {
-            new Thread(this::playUntilStopped).start();
+            competitionThread = new Thread(this::playUntilStopped);
+            competitionThread.start();
             competitionRunning = true;
+            runWarButton.setText("<html><font color=red>Stop!</font></html>");
         }
 
     }
 
     public void playUntilStopped(){
+        List<Integer> winners;
+        GameConstants consts = new GameConstants();
+        for (List<Integer> permutation : permutations){
+            winners = competition.runGame(permutation, consts);
+            for (Integer i : winners){
+                updateScore(i, 1.0f / winners.size());
+            }
+        }
+        runWarButton.setText("<html><font color=red>Start!</font></html>");
+        competitionRunning = false;
+    }
 
+    public List<List<Integer>> getAllPermutations(int n){
+        if (n > 6){
+            throw new RuntimeException("getAllPermutations supports only n < 7");
+        }
+        if (n == 0){
+            List<List<Integer>> retList = new ArrayList<>();
+            retList.add(new ArrayList<>());
+            retList.get(0).add(0);
+            return retList;
+        }
+        List<List<Integer>> prevList = getAllPermutations(n - 1);
+        List<List<Integer>> retList = new ArrayList<>();
+        for (List<Integer> perm : prevList){
+            for (int i = 0; i <= perm.size(); i++){
+                perm.add(i, n);
+                retList.add(new ArrayList<>(perm));
+                perm.remove(i);
+            }
+        }
+        return retList;
     }
 
     public void updateScore(int index, float value) {
