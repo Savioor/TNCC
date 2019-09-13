@@ -4,7 +4,11 @@ import game.Game;
 import game.Player;
 import game.actions.RecruitAction;
 
+import java.util.logging.Logger;
+
 public class ProductionEvent extends AbstractEvent {
+
+    private Logger logger;
 
     public ProductionEvent(Game game) {
         super(game);
@@ -12,7 +16,7 @@ public class ProductionEvent extends AbstractEvent {
 
     @Override
     public void initialize() {
-
+        logger = Logger.getLogger("production");
     }
 
     @Override
@@ -51,6 +55,7 @@ public class ProductionEvent extends AbstractEvent {
 
                 if (p.getResource(Game.Resources.POPULATION.ordinal()) < 0){
                     p.setAlive(false);
+                    logger.info(p.getName() + " lost the game");
                 }
 
             }

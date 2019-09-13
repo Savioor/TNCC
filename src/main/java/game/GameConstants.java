@@ -14,6 +14,8 @@ public class GameConstants {
             defendingWave1Multiplier,
             attackingWave2Multiplier;
 
+    public final int maxTurns;
+
     private HashMap<Game.Resources, Integer> startingValues = new HashMap<>();
     private HashMap<Game.Resources, Double> stealingFactor = new HashMap<>();
 
@@ -47,6 +49,7 @@ public class GameConstants {
         goldForWar = 1600;
         defendingWave1Multiplier = 2;
         attackingWave2Multiplier = 2;
+        maxTurns = 1000;
     }
 
 }

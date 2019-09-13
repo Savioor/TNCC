@@ -6,12 +6,15 @@ import game.events.ProductionEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class Game {
 
     private List<Player> players;
     private List<AbstractEvent> events;
     private GameConstants consts;
+    private Logger gameLogger;
+    private int turn;
 
     public Game(List<Player> players, GameConstants conts) {
         this.players = players;
@@ -20,6 +23,8 @@ public class Game {
         events.add(new ProductionEvent(this));
         for (Player p : players)
             p.initialize(this);
+        gameLogger = Logger.getLogger("game");
+        turn = 0;
     }
 
     public List<Player> getPlayers() {
@@ -38,7 +43,7 @@ public class Game {
         LAND
     }
 
-    public void executeCycle(){
+    public List<Player> executeCycle(){
         for (Player p : players) {
             if (p.isAlive())
                 executeTurn(p);
@@ -50,18 +55,31 @@ public class Game {
             if (event.isFinished())
                 events.remove(event);
         }
+
+        List<Player> alive = new ArrayList<>();
+        for (Player p : players)
+            if (p.isAlive()) alive.add(p);
+        if (alive.size() == 1){
+            return alive;
+        }
+        if (turn == consts.maxTurns){
+            return alive;
+        }
+        turn++;
+        return null;
     }
 
     public void executeTurn(Player current){
 
         IAction action;
-        System.out.println("HMmmmmmt");
 
         while(true){
             action = current.getAction(this);
             if (action.execute(this, current))
                 break;
         }
+
+        gameLogger.info(action.getName() + " was run by " + current.getName());
 
     }
 
