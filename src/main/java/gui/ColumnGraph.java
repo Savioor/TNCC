@@ -9,7 +9,7 @@ import java.awt.*;
 public class ColumnGraph extends JComponent {
 	private static final long serialVersionUID = 1L;
 	
-	private float[][] values;
+	private float[] values;
     private String[] names;
     private float maxValue;
     private double reduceFactor;
@@ -20,7 +20,7 @@ public class ColumnGraph extends JComponent {
         super();
         this.names = new String[names.length];
         // the first element holds the sum of all the other values
-        values = new float[names.length][3];
+        values = new float[names.length];
         System.arraycopy(names, 0, this.names, 0, names.length);
         maxValue = 0;
         reduceFactor = 5;
@@ -36,13 +36,12 @@ public class ColumnGraph extends JComponent {
         return getMinimumSize();
     }
 
-    public void addToValue(int pos, int subIndex, float value) {
-        values[pos][0]+= value;
-        values[pos][subIndex+1]+= value;
+    public void addToValue(int pos, float value) {
+        values[pos] += value;
 
-        if (values[pos][0] > maxValue) {
+        if (values[pos] > maxValue) {
             // reset graph factor by half to make more room
-            maxValue = values[pos][0];
+            maxValue = values[pos];
             if (maxValue * reduceFactor > getSize().height-10) {
                 reduceFactor *= 0.5;
             }
@@ -71,11 +70,8 @@ public class ColumnGraph extends JComponent {
 
     private void paintColumn(Graphics g, int col, int width, int startHeight, ColorHolder colorHolder) {
         g.setColor(colorHolder.getColor(col, false));
-        int height1 = (int) (reduceFactor*values[col][1]);
-        g.fill3DRect(col*width, startHeight - height1, width, height1, true);
-        g.setColor(colorHolder.getColor(col, true));
-        int height2 = (int) (reduceFactor*values[col][2]);
-        g.fill3DRect(col*width, startHeight - height1 - height2, width, height2, true);
-        g.drawString(""+values[col][0], col*width+5, startHeight-height1-height2- 5);
+        int height = (int) (reduceFactor*values[col]);
+        g.fill3DRect(col*width, startHeight - height, width, height, true);
+        g.drawString(""+values[col], col*width+5, startHeight-height- 5);
     }	
 }
