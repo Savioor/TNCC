@@ -49,7 +49,7 @@ public class GameConstants {
         goldForWar = 1600;
         defendingWave1Multiplier = 2;
         attackingWave2Multiplier = 2;
-        maxTurns = 1000;
+        maxTurns = 100;
     }
 
 }

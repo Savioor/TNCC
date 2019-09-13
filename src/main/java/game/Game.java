@@ -15,6 +15,7 @@ public class Game {
     private GameConstants consts;
     private Logger gameLogger;
     private int turn;
+    private final long BOT_TIMEOUT = 100;
 
     public Game(List<Player> players, GameConstants conts) {
         this.players = players;
@@ -45,8 +46,22 @@ public class Game {
 
     public List<Player> executeCycle(){
         for (Player p : players) {
-            if (p.isAlive())
-                executeTurn(p);
+            if (p.isAlive()) {
+                if (!p.isBot) {
+                    executeTurn(p);
+                } else {
+                    Thread botThread = new Thread(() -> executeTurn(p));
+                    botThread.start();
+                    long timeStart = System.currentTimeMillis();
+                    while (botThread.isAlive()){
+                        if (System.currentTimeMillis() - timeStart > BOT_TIMEOUT){
+                            botThread.stop();
+                            gameLogger.warning(p.getName() + " has taken too much time to respond");
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
         List<AbstractEvent> eventClone = new ArrayList<>(events);

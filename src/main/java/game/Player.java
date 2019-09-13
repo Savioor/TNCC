@@ -14,17 +14,23 @@ public class Player {
     private boolean isAlive;
     protected IActionGetter actor;
     protected IReActionGetter reactor;
+    public final boolean isBot;
 
-    public Player(String name, IActionGetter getter, IReActionGetter reactGetter){
+    public Player(String name, IActionGetter getter, IReActionGetter reactGetter, boolean isBot){
         this.name = name;
         actor = getter;
         reactor = reactGetter;
         isAlive = true;
         resources = new int[Game.Resources.values().length];
+        this.isBot = isBot;
+    }
+
+    public Player(String name, IActionGetter getter, IReActionGetter reactGetter){
+        this(name, getter, reactGetter, false);
     }
 
     public Player clone(){
-        return new Player(this.name, actor, reactor);
+        return new Player(this.name, actor, reactor, isBot);
     }
 
     public Player getDummy(){
