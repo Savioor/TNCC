@@ -23,6 +23,10 @@ public class Player {
         resources = new int[Game.Resources.values().length];
     }
 
+    public Player clone(){
+        return new Player(this.name, actor, reactor);
+    }
+
     public Player getDummy(){
         Player dummy = new Player(this.name, null, null);
         dummy.setAlive(this.isAlive);

@@ -1,5 +1,6 @@
 package gui;
 
+import game.Competition;
 import game.Game;
 import game.GameConstants;
 import game.Player;
