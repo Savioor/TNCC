@@ -118,7 +118,7 @@ public class WarAction implements IRespondableAction<WarReaction> {
             tempAttacking = attackingForcesDivision.get(i);
             tempDefending = reaction.getReaction().get(i);
             attackingForcesDivision.set(i, Math.max(0, (int)(attackingForcesDivision.get(i) - game.getConsts().defendingWave1Multiplier*tempDefending)));
-            reaction.getReaction().set(i, (int)Math.max(game.getConsts().defendingWave1Multiplier*tempDefending - tempAttacking, 0));
+            reaction.getReaction().set(i, (int)Math.max(Math.min(game.getConsts().defendingWave1Multiplier*tempDefending - tempAttacking, tempDefending), 0));
     }
 
         int sumAttacking = 0, sumDefending = 0;
