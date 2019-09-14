@@ -6,13 +6,7 @@ import game.Game;
 import game.Player;
 import game.actions.IAction;
 import game.actions.RecruitAction;
-import game.actions.reactions.Reaction;
-import game.actions.reactions.TradeReaction;
-import game.actions.reactions.WarReaction;
-import util.ThreeTupleInt;
-
-import java.util.ArrayList;
-import java.util.List;
+import util.Tuple3;
 
 public class TurtleBot extends Bot {
     @Override
@@ -20,8 +14,8 @@ public class TurtleBot extends Bot {
         double foodPerArmy = game.getConsts().armyFoodConsumption;
         double goldForArmy = game.getConsts().goldForWar;
         int largestArmy = 0;
-        for (Player p : game.getPlayers()){
-            if (p.getResource(Game.Resources.GOLD) >= goldForArmy){
+        for (Player p : game.getPlayers()) {
+            if (p.getResource(Game.Resources.GOLD) >= goldForArmy) {
                 if (p.getName().equals(self.getName()))
                     continue;
                 if (p.getResource(Game.Resources.MILITARY) > largestArmy)
@@ -32,7 +26,7 @@ public class TurtleBot extends Bot {
             return new RecruitAction(-self.getResource(Game.Resources.MILITARY));
         }
 
-        int maxRecruit = (int)(self.getResource(Game.Resources.POPULATION)*(1 - (foodPerArmy / (foodPerArmy + 1.0))));
+        int maxRecruit = (int) (self.getResource(Game.Resources.POPULATION) * (1 - (foodPerArmy / (foodPerArmy + 1.0))));
         int toRecruit = Math.min(largestArmy - self.getResource(Game.Resources.MILITARY), maxRecruit);
         return new RecruitAction(toRecruit);
     }
@@ -43,8 +37,8 @@ public class TurtleBot extends Bot {
     }
 
     @Override
-    public ThreeTupleInt fightWar(GameWrapper game, Player self, Player other, int attackingForces) {
-        int thirdOfArmy = self.getResource(Game.Resources.MILITARY)/3;
-        return new ThreeTupleInt(thirdOfArmy,thirdOfArmy,thirdOfArmy);
+    public Tuple3<Integer> fightWar(GameWrapper game, Player self, Player other, int attackingForces) {
+        int thirdOfArmy = self.getResource(Game.Resources.MILITARY) / 3;
+        return new Tuple3<>(thirdOfArmy, thirdOfArmy, thirdOfArmy);
     }
 }

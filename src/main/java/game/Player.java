@@ -97,4 +97,8 @@ public class Player {
     public <T> Reaction<T> getReaction(List<String> action, Game game){
         return reactor.getReAction(action, game, this);
     }
+
+    public String toString(){
+        return getName();
+    }
 }

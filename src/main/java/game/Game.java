@@ -6,7 +6,8 @@ import game.events.ProductionEvent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
+import util.log.Logger;
+import util.log.NamedLogger;
 
 public class Game {
 
@@ -24,7 +25,7 @@ public class Game {
         events.add(new ProductionEvent(this));
         for (Player p : players)
             p.initialize(this);
-        gameLogger = Logger.getLogger("game");
+        gameLogger = new NamedLogger("GAME");
         turn = 0;
     }
 
@@ -55,8 +56,8 @@ public class Game {
                     long timeStart = System.currentTimeMillis();
                     while (botThread.isAlive()){
                         if (System.currentTimeMillis() - timeStart > BOT_TIMEOUT){
-                            botThread.stop();
-                            gameLogger.warning(p.getName() + " has taken too much time to respond");
+                            botThread.interrupt();
+                            gameLogger.warn(p.getName() + " took too much time to respond");
                             break;
                         }
                     }
@@ -92,10 +93,10 @@ public class Game {
             action = current.getAction(this);
             if (action.execute(this, current))
                 break;
-            gameLogger.warning(current.getName() + " executed Illegal action " + action.getName());
+            gameLogger.warn(current.getName() + " executed Illegal action " + action.getName());
         }
 
-        gameLogger.info(action.getName() + " was run by " + current.getName());
+        gameLogger.debug(action.getName() + " was run by " + current.getName());
 
     }
 

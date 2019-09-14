@@ -2,25 +2,26 @@ package util;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
-public class ThreeTupleInt implements Iterable<Integer> {
-    public int first;
-    public int second;
-    public int third;
+public class Tuple3<T> implements Iterable<T> {
+    public T first;
+    public T second;
+    public T third;
 
-    private ArrayList<Integer> asList;
+    private List<T> asList;
 
-    public ThreeTupleInt(int first, int second, int third){
+    public Tuple3(T first, T second, T third){
         this.first = first;
         this.second = second;
         this.third = third;
-        asList = new ArrayList<Integer>();
+        asList = new ArrayList<>();
         asList.add(first);
         asList.add(second);
         asList.add(third);
     }
 
-    public int get(int i){
+    public T get(int i){
         switch (i){
             case 0:
                 return first;
@@ -33,7 +34,7 @@ public class ThreeTupleInt implements Iterable<Integer> {
         }
     }
 
-    public void set(int i, int value){
+    public void set(int i, T value){
         switch (i){
             case 0:
                 first = value;
@@ -50,7 +51,7 @@ public class ThreeTupleInt implements Iterable<Integer> {
     }
 
     @Override
-    public Iterator<Integer> iterator() {
+    public Iterator<T> iterator() {
         asList.set(0,first);
         asList.set(1,second);
         asList.set(2,third);
