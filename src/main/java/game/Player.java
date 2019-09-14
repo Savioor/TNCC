@@ -130,4 +130,13 @@ public class Player {
     public String toString(){
         return getName();
     }
+
+    public boolean canAttack(GameWrapper game, Player other){
+        return (!other.getName().equals(this.getName())) && other.isAlive() && this.canGoToWar(game);
+    }
+
+    public boolean canTradeWith(GameWrapper game, Player other){
+        return (!other.getName().equals(this.getName())) && other.isAlive();
+    }
+
 }
