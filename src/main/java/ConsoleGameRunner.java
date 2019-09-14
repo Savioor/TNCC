@@ -22,7 +22,7 @@ public class ConsoleGameRunner {
 
         List<Player> players = new ArrayList<>();
 
-        List<IAction> actions = new ArrayList<>();
+        List<IRespondableAction> actions = new ArrayList<>();
         actions.add(new WaitAction());
         actions.add(new RecruitAction(0));
         actions.add(new TradeAction(null, null, 0, 0, null));

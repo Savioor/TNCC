@@ -1,7 +1,7 @@
 package game;
 
+import game.actions.IRespondableAction;
 import game.actions.action_getters.IActionGetter;
-import game.actions.IAction;
 import game.actions.action_getters.IReActionGetter;
 import game.actions.reactions.Reaction;
 
@@ -90,7 +90,7 @@ public class Player {
         isAlive = alive;
     }
 
-    public IAction getAction(Game game) {
+    public IRespondableAction getAction(Game game) {
         return actor.getAction(game, this);
     }
 

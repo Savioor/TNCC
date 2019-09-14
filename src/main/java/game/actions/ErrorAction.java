@@ -2,10 +2,12 @@ package game.actions;
 
 import game.Game;
 import game.Player;
+import game.actions.reactions.Reaction;
+import util.Tuple2;
 
 import java.util.List;
 
-public class ErrorAction implements IAction {
+public class ErrorAction implements IRespondableAction<Reaction> {
 
     private String reason;
 
@@ -20,14 +22,14 @@ public class ErrorAction implements IAction {
     }
 
     @Override
-    public IAction parse(Game game, List<String> data) {
+    public IRespondableAction<Reaction> parse(Game game, List<String> data) {
         return new ErrorAction("");
     }
 
     @Override
-    public boolean execute(Game game, Player actor) {
+    public Tuple2<Boolean, Tuple2<Player, List<String>>> execute(Game game, Player actor) {
         System.err.println(reason);
-        return false;
+        return new Tuple2<>(false, null);
     }
 
     public ErrorAction(String reason){
@@ -36,5 +38,20 @@ public class ErrorAction implements IAction {
 
     public String getReason() {
         return reason;
+    }
+
+    @Override
+    public boolean validateResponse(Reaction reaction) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
+    public boolean executeWithResponse(Game game, Player actor, Player reactor, Reaction reaction) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
+    public Reaction defaultBotResponse() {
+        return null;
     }
 }

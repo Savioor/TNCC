@@ -1,13 +1,21 @@
 package game;
 
-import game.actions.IAction;
+import game.actions.IRespondableAction;
+import game.actions.reactions.Reaction;
 import game.events.AbstractEvent;
 import game.events.ProductionEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+import util.Tuple2;
 import util.log.Logger;
 import util.log.NamedLogger;
+
+import javax.swing.*;
 
 public class Game {
 
@@ -17,6 +25,8 @@ public class Game {
     private Logger gameLogger;
     private int turn;
     private final long BOT_TIMEOUT = 20;
+
+    public static final String ACTION_OK = "OK", ACTION_FAIL = "FAIL";
 
     public Game(List<Player> players, GameConstants conts) {
         this.players = players;
@@ -47,22 +57,7 @@ public class Game {
 
     public List<Player> executeCycle(){
         for (Player p : players) {
-            if (p.isAlive()) {
-                if (!p.isBot) {
-                    executeTurn(p);
-                } else {
-                    Thread botThread = new Thread(() -> executeTurn(p));
-                    botThread.start();
-                    long timeStart = System.currentTimeMillis();
-                    while (botThread.isAlive()){
-                        if (System.currentTimeMillis() - timeStart > BOT_TIMEOUT){
-                            botThread.interrupt();
-                            gameLogger.warn(p.getName() + " took too much time to respond");
-                            break;
-                        }
-                    }
-                }
-            }
+            executeTurn(p);
         }
 
         List<AbstractEvent> eventClone = new ArrayList<>(events);
@@ -87,17 +82,39 @@ public class Game {
 
     public void executeTurn(Player current){
 
-        IAction action;
+        IRespondableAction action;
+        Reaction reaction;
+        Tuple2<Boolean, Tuple2<Player, List<String>>> response;
 
         while(true){
+
             action = current.getAction(this);
-            if (action.execute(this, current))
-                break;
+            response = action.execute(this, current);
+            if (response.first) {
+
+                if (response.second == null)
+                    break;
+
+                while (true) {
+                    reaction = response.second.first.getReaction(response.second.second, this);
+                    if (action.validateResponse(reaction)){
+                        break;
+                    }
+                    if (response.second.first.isBot){
+                        reaction = action.defaultBotResponse();
+                        break;
+                    }
+                }
+
+                if (action.executeWithResponse(this, current, response.second.first, reaction)){
+                    break;
+                }
+
+            }
             gameLogger.warn(current.getName() + " executed Illegal action " + action.getName());
         }
 
         gameLogger.debug(action.getName() + " was run by " + current.getName());
-
     }
 
     public Player getPlayerByNameOrId(String input){

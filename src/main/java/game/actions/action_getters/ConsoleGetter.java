@@ -3,7 +3,7 @@ package game.actions.action_getters;
 import game.Game;
 import game.Player;
 import game.actions.ErrorAction;
-import game.actions.IAction;
+import game.actions.IRespondableAction;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,14 +13,14 @@ import java.util.Scanner;
 public class ConsoleGetter implements IActionGetter {
 
     private Scanner output = new Scanner(System.in);
-    private List<IAction> possibleActions;
+    private List<IRespondableAction> possibleActions;
 
-    public ConsoleGetter(List<IAction> actions) {
+    public ConsoleGetter(List<IRespondableAction> actions) {
         possibleActions = actions;
     }
 
     @Override
-    public IAction getAction(Game game, Player player) {
+    public IRespondableAction getAction(Game game, Player player) {
         System.out.println("------------------");
         System.out.println("Current Board: ");
         StringBuilder title = new StringBuilder("NAME\t");
@@ -42,7 +42,7 @@ public class ConsoleGetter implements IActionGetter {
         System.out.println("------------------");
         System.out.println("It's " + player.getName() + "'s turn. What will be his action?");
         System.out.println("Options: ");
-        for (IAction action : possibleActions){
+        for (IRespondableAction action : possibleActions){
             System.out.println(action.getInfo());
         }
         System.out.println();
@@ -51,7 +51,7 @@ public class ConsoleGetter implements IActionGetter {
         ArrayList<String> dataSpalt = new ArrayList<>(Arrays.asList(data.split(" ")));
         String name = dataSpalt.get(0).toLowerCase();
         dataSpalt.remove(0);
-        for (IAction action : possibleActions){
+        for (IRespondableAction action : possibleActions){
             if (name.equals(action.getName()))
                 return action.parse(game, dataSpalt);
         }

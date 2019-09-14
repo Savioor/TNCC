@@ -4,13 +4,13 @@ import bottools.Bot;
 import bottools.GameWrapper;
 import game.Game;
 import game.Player;
-import game.actions.IAction;
+import game.actions.IRespondableAction;
 import game.actions.RecruitAction;
 import util.Tuple3;
 
 public class TurtleBot extends Bot {
     @Override
-    public IAction getBotAction(GameWrapper game, Player self) {
+    public IRespondableAction getBotAction(GameWrapper game, Player self) {
         double foodPerArmy = game.getConsts().armyFoodConsumption;
         double goldForArmy = game.getConsts().goldForWar;
         int largestArmy = 0;

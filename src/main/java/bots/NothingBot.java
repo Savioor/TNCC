@@ -4,14 +4,14 @@ import bottools.Bot;
 import bottools.GameWrapper;
 import game.Game;
 import game.Player;
-import game.actions.IAction;
+import game.actions.IRespondableAction;
 import game.actions.WaitAction;
 import util.Tuple3;
 
 public class NothingBot extends Bot {
 
     @Override
-    public IAction getBotAction(GameWrapper game, Player self) {
+    public IRespondableAction getBotAction(GameWrapper game, Player self) {
         return new WaitAction();
     }
 

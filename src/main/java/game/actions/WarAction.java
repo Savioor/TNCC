@@ -3,12 +3,14 @@ package game.actions;
 import game.Game;
 import game.Player;
 import game.actions.reactions.Reaction;
+import game.actions.reactions.WarReaction;
+import util.Tuple2;
 import util.Tuple3;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class WarAction implements IAction {
+public class WarAction implements IRespondableAction<WarReaction> {
 
     private Player attackedPlayer;
     private List<Integer> attackingForcesDivision;
@@ -29,7 +31,7 @@ public class WarAction implements IAction {
     }
 
     @Override
-    public IAction parse(Game game, List<String> data) {
+    public IRespondableAction parse(Game game, List<String> data) {
         if (data.size() != 4)
             return new ErrorAction("Expected 4 arguments, received " + data.size());
 
@@ -50,38 +52,52 @@ public class WarAction implements IAction {
     }
 
     @Override
-    public boolean execute(Game game, Player actor) {
-        if (attackingForcesDivision.size() != 3) return false;
+    public Tuple2<Boolean, Tuple2<Player, List<String>>> execute(Game game, Player actor) {
+        if (attackingForcesDivision.size() != 3) return new Tuple2<>(false, null);
         int sum = 0;
         for (Integer I : attackingForcesDivision){
-            if (I < 0) return false;
+            if (I < 0) return new Tuple2<>(false, null);
             sum += I;
         }
-        if (actor.getResource(Game.Resources.MILITARY) < sum) return false;
-        if (attackedPlayer.equals(actor)) return false;
-        if (!attackedPlayer.isAlive()) return false;
-        if (actor.getResource(Game.Resources.GOLD) < game.getConsts().goldForWar) return false;
+        if (actor.getResource(Game.Resources.MILITARY) < sum) return new Tuple2<>(false, null);
+        if (attackedPlayer.equals(actor)) return new Tuple2<>(false, null);
+        if (!attackedPlayer.isAlive()) return new Tuple2<>(false, null);
+        if (actor.getResource(Game.Resources.GOLD) < game.getConsts().goldForWar) return new Tuple2<>(false, null);
 
         List<String> message = new ArrayList<>();
         message.add("attack");
         message.add(actor.getName());
         message.add(Integer.toString(sum));
-        Reaction<Tuple3<Integer>> action;
+
+        return new Tuple2<>(true, new Tuple2<>(attackedPlayer, message));
+    }
+
+    @Override
+    public boolean validateResponse(WarReaction reaction) {
+        int tempSum = 0;
+        if (reaction.getStatus().equals(Reaction.Status.OK)){
+            boolean failed = false;
+            for (Integer i : reaction.getReaction()){
+                if (i < 0) failed = true;
+                tempSum += i;
+            }
+            if (attackedPlayer.getResource(Game.Resources.MILITARY) < tempSum) failed = true;
+            if (!failed)
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean executeWithResponse(Game game, Player actor, Player reactor, WarReaction reaction) {
+        int sum = 0;
+        for (Integer I : attackingForcesDivision){
+            sum += I;
+        }
 
         int tempSum = 0;
-
-        while (true){
-            action = attackedPlayer.getReaction(message, game);
-            if (action.getStatus().equals(Reaction.Status.OK)){
-                boolean failed = false;
-                for (Integer i : action.getReaction()){
-                    if (i < 0) failed = true;
-                    tempSum += i;
-                }
-                if (attackedPlayer.getResource(Game.Resources.MILITARY) < tempSum) failed = true;
-                if (!failed)
-                    break;
-            }
+        for (Integer I : reaction.getReaction()){
+            tempSum += I;
         }
 
         attackedPlayer.subtractResource(Game.Resources.MILITARY, tempSum);
@@ -91,15 +107,15 @@ public class WarAction implements IAction {
         int tempAttacking, tempDefending;
         for (int i = 0; i < 3; i++){
             tempAttacking = attackingForcesDivision.get(i);
-            tempDefending = action.getReaction().get(i);
+            tempDefending = reaction.getReaction().get(i);
             attackingForcesDivision.set(i, Math.max(0, (int)(attackingForcesDivision.get(i) - game.getConsts().defendingWave1Multiplier*tempDefending)));
-            action.getReaction().set(i, (int)Math.max(Math.min(0, game.getConsts().defendingWave1Multiplier*tempDefending - tempAttacking), 0));
+            reaction.getReaction().set(i, (int)Math.max(Math.min(0, game.getConsts().defendingWave1Multiplier*tempDefending - tempAttacking), 0));
         }
 
         int sumAttacking = 0, sumDefending = 0;
         for (int i = 0; i < 3; i++){
             sumAttacking += attackingForcesDivision.get(i);
-            sumDefending += action.getReaction().get(i);
+            sumDefending += reaction.getReaction().get(i);
         }
 
         Player winner, loser;
@@ -133,5 +149,10 @@ public class WarAction implements IAction {
             loser.setAlive(false);
 
         return true;
+    }
+
+    @Override
+    public WarReaction defaultBotResponse() {
+        return new WarReaction(new Tuple3<>(0,0,0), Reaction.Status.OK);
     }
 }

@@ -2,7 +2,7 @@ package bottools;
 
 import game.Game;
 import game.Player;
-import game.actions.IAction;
+import game.actions.IRespondableAction;
 import game.actions.action_getters.IActionGetter;
 import game.actions.action_getters.IReActionGetter;
 import game.actions.reactions.FailedReaction;
@@ -33,7 +33,7 @@ public abstract class Bot implements IBot, IActionGetter, IReActionGetter {
     }
 
     @Override
-    public final IAction getAction(Game game, Player player) {
+    public final IRespondableAction getAction(Game game, Player player) {
         initData(game, player.getName());
         return getBotAction(wrapper, player.getDummy());
     }
