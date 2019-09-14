@@ -16,6 +16,9 @@ public class Competition {
     public Competition(List<Player> players) {
         this.players = players;
         this.logger = new NamedLogger("COMPETITION");
+        logger.setDebug(false);
+        logger.setInfo(true);
+        logger.setWarn(true);
     }
 
     public List<Integer> runGame(List<Integer> order, GameConstants consts){
