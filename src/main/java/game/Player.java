@@ -100,7 +100,7 @@ public class Player {
     }
 
     public boolean canGoToWar(GameWrapper game){
-        return this.getResource(Game.Resources.GOLD) < game.getConsts().goldForWar && this.isAlive();
+        return this.getResource(Game.Resources.GOLD) >= game.getConsts().goldForWar && this.isAlive();
     }
 
     public int getGold(){

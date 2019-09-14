@@ -23,7 +23,7 @@ public class GUIGameRunner {
         List<Player> playerList = new ArrayList<>();
         playerList.add(createBotPlayer("Turtle1", new TurtleBot()));
         playerList.add(createBotPlayer("Turtle2", new TurtleBot()));
-        playerList.add(createBotPlayer("Turtle3", new TurtleBot()));
+        playerList.add(createBotPlayer("War", new WarBot()));
         playerList.add(createBotPlayer("Blitz", new BlitzBot()));
         Competition c = new Competition(playerList);
         gameFrame = new CompetitionWindow(c);

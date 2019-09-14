@@ -28,7 +28,7 @@ public class WarBot extends Bot {
 
     @Override
     public IRespondableAction<? extends Reaction> getBotAction(GameWrapper game, Player self) {
-        if(self.getResource(Game.Resources.MILITARY) != 0 && self.canGoToWar(game)) {
+        if(self.getResource(Game.Resources.MILITARY) >= 3 && self.canGoToWar(game)) {
             List<Player> playerList = game.getPlayers();
             Player attacked = null;
             while (attacked == null) {
