@@ -93,7 +93,14 @@ public class BlitzBot extends Bot {
     @Override
     public Tuple3<Integer> fightWar(GameWrapper game, Player self, Player other, int attackingForces) {
         int thirdOfArmy = self.getResource(Game.Resources.MILITARY) / 3;
-        return new Tuple3<>(thirdOfArmy, thirdOfArmy, thirdOfArmy);
+        int halfOfArmy = self.getMilitary() / 3;
+        if (attackingForces <= game.getConsts().defendingWave1Multiplier*thirdOfArmy) {
+            return new Tuple3<>(thirdOfArmy, thirdOfArmy, thirdOfArmy);
+        } else {
+            Tuple3<Integer> defence = new Tuple3<>(halfOfArmy, halfOfArmy, halfOfArmy);
+            defence.set(random.nextInt(3), 0);
+            return defence;
+        }
     }
 
     @Override

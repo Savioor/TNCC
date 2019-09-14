@@ -33,7 +33,7 @@ public class GUIGameRunner {
 
 
         Competition c = new Competition(playerList);
-        gameFrame = new CompetitionWindow(c, new GameConstants(GameConstants.ConstantsGroup.DECAY));
+        gameFrame = new CompetitionWindow(c, new GameConstants(GameConstants.ConstantsGroup.DEFAULT));
         gameFrame.setVisible(true);
         gameFrame.pack();
     }
