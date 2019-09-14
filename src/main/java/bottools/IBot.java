@@ -12,5 +12,6 @@ public interface IBot {
     boolean acceptTrade(GameWrapper game, Player self, Player other,
                                         Game.Resources getting, int gettingAmount, Game.Resources giving, int givingAmount);
     Tuple3<Integer> fightWar(GameWrapper game, Player self, Player other, int attackingForces);
+    void reset(GameWrapper game, Player self);
 
 }

@@ -57,6 +57,12 @@ public abstract class Bot implements IBot, IActionGetter, IReActionGetter {
         return new FailedReaction<>();
     }
 
+    public void updateBot(Game game, Player self){
+        wrapper = null;
+        initData(game, self.getName());
+        reset(wrapper, self);
+    }
+
     protected final Logger getLogger(){
         return logger;
     }

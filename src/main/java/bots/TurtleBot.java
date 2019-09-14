@@ -11,6 +11,7 @@ import util.Tuple3;
 public class TurtleBot extends Bot {
     @Override
     public IRespondableAction getBotAction(GameWrapper game, Player self) {
+        double foodProd = game.getConsts().populationFoodProduction;
         double foodPerArmy = game.getConsts().armyFoodConsumption;
         double goldForArmy = game.getConsts().goldForWar;
         int largestArmy = 0;
@@ -26,8 +27,8 @@ public class TurtleBot extends Bot {
             return new RecruitAction(-self.getResource(Game.Resources.MILITARY));
         }
 
-        int maxRecruit = (int) (self.getResource(Game.Resources.POPULATION) * (1 - (foodPerArmy / (foodPerArmy + 1.0))));
-        int toRecruit = Math.min(largestArmy - self.getResource(Game.Resources.MILITARY), maxRecruit);
+        int minimumPop = (int) ((self.getTotalPopulation()*foodPerArmy) / (foodProd + foodPerArmy)) + 1;
+        int toRecruit = Math.min(largestArmy - self.getResource(Game.Resources.MILITARY), self.getPopulation() - minimumPop);
         return new RecruitAction(toRecruit);
     }
 
@@ -40,5 +41,10 @@ public class TurtleBot extends Bot {
     public Tuple3<Integer> fightWar(GameWrapper game, Player self, Player other, int attackingForces) {
         int thirdOfArmy = self.getResource(Game.Resources.MILITARY) / 3;
         return new Tuple3<>(thirdOfArmy, thirdOfArmy, thirdOfArmy);
+    }
+
+    @Override
+    public void reset(GameWrapper game, Player self) {
+
     }
 }

@@ -53,4 +53,9 @@ public class WarBot extends Bot {
         int thirdOfArmy = self.getResource(Game.Resources.MILITARY) / 3;
         return new Tuple3<>(thirdOfArmy, thirdOfArmy, thirdOfArmy);
     }
+
+    @Override
+    public void reset(GameWrapper game, Player self) {
+
+    }
 }

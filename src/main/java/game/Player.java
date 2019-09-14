@@ -123,6 +123,10 @@ public class Player {
         return getResource(Game.Resources.FOOD);
     }
 
+    public int getTotalPopulation(){
+        return getPopulation() + getMilitary();
+    }
+
     public String toString(){
         return getName();
     }

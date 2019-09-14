@@ -61,7 +61,8 @@ public class Game {
 
     public List<Player> executeCycle(){
         for (Player p : players) {
-            executeTurn(p);
+            if (p.isAlive())
+                executeTurn(p);
         }
 
         List<AbstractEvent> eventClone = new ArrayList<>(events);
@@ -99,9 +100,10 @@ public class Game {
 
                 if (response.second == null)
                     break;
-
+                Player responder = getPlayerByNameOrId(response.second.first.getName());
                 while (true) {
-                    reaction = response.second.first.getReaction(response.second.second, this);
+
+                    reaction = responder.getReaction(response.second.second, this);
                     if (action.validateResponse(reaction)){
                         break;
                     }
@@ -111,7 +113,7 @@ public class Game {
                     }
                 }
 
-                if (action.executeWithResponse(this, current, response.second.first, reaction)){
+                if (action.executeWithResponse(this, current, responder, reaction)){
                     break;
                 }
 

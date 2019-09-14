@@ -24,4 +24,9 @@ public class NothingBot extends Bot {
     public Tuple3<Integer> fightWar(GameWrapper game, Player self, Player other, int attackingForces) {
         return new Tuple3<>(0,0,0);
     }
+
+    @Override
+    public void reset(GameWrapper game, Player self) {
+
+    }
 }

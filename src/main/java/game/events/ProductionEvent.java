@@ -13,11 +13,11 @@ public class ProductionEvent extends AbstractEvent {
 
     public ProductionEvent(Game game) {
         super(game);
+        logger = new NamedLogger("PRODUCTION");
     }
 
     @Override
     public void initialize() {
-        logger = new NamedLogger("PRODUCTION");
     }
 
     @Override
