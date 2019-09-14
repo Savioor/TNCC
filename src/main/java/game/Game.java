@@ -82,7 +82,25 @@ public class Game {
             return alive;
         }
         turn++;
-        logger.info("Cycle finished");
+        logger.info("------------------");
+        logger.info("Current Board: ");
+        StringBuilder title = new StringBuilder("NAME\t");
+        for (Game.Resources res : Game.Resources.values()){
+            title.append(res.name());
+            title.append("\t");
+        }
+        title.append("ALIVE");
+        logger.info(title.toString());
+        for (Player p : this.getPlayers()){
+            StringBuilder resourseBuilder = new StringBuilder(p.getName() + "\t");
+            for (Game.Resources res : Game.Resources.values()){
+                resourseBuilder.append(p.getResource(res.ordinal()));
+                resourseBuilder.append("\t\t");
+            }
+            resourseBuilder.append(p.isAlive());
+            logger.info(resourseBuilder.toString());
+        }
+        logger.info("------------------");
         return null;
     }
 

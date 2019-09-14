@@ -12,11 +12,13 @@ public class TurtleBot extends Bot {
     @Override
     public IRespondableAction getBotAction(GameWrapper game, Player self) {
         double foodProd = game.getConsts().populationFoodProduction;
+        double popGoldPord = game.getConsts().populationGoldProduction;
+        double armyGoldUse = game.getConsts().armyGoldConsumption;
         double foodPerArmy = game.getConsts().armyFoodConsumption;
         double goldForArmy = game.getConsts().goldForWar;
         int largestArmy = 0;
         for (Player p : game.getPlayers()) {
-            if (p.getResource(Game.Resources.GOLD) >= goldForArmy) {
+            if (p.getResource(Game.Resources.GOLD) + popGoldPord*p.getPopulation() - p.getMilitary()*armyGoldUse >= goldForArmy) {
                 if (p.getName().equals(self.getName()))
                     continue;
                 if (p.getResource(Game.Resources.MILITARY) > largestArmy)

@@ -41,6 +41,7 @@ public class Competition {
         }
         List<Integer> winnerIds = new ArrayList<>();
         for (Player p : winners){
+            logger.info(String.format("%s survived this game!", p.getName()));
             winnerIds.add(getPlayerId(p));
         }
         return winnerIds;

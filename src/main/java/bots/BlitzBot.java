@@ -27,13 +27,14 @@ public class BlitzBot extends Bot {
     public IRespondableAction getBotAction(GameWrapper game, Player self) {
         double foodProd = game.getConsts().populationFoodProduction;
         double foodPerArmy = game.getConsts().armyFoodConsumption;
+        double goldProd = game.getConsts().populationGoldProduction;
         double goldPerSoldier = game.getConsts().armyGoldConsumption;
         double goldForArmy = game.getConsts().goldForWar;
         if ((self.getGold() - self.getTotalPopulation()*goldPerSoldier < GOLD_SAFETY_FACTOR*goldForArmy
                 || self.getFood() < FOOD_SAFETY_FACTOR*foodPerArmy*self.getTotalPopulation()) && !determined) {
             int largestArmy = 0;
             for (Player p : game.getPlayers()) {
-                if (p.getResource(Game.Resources.GOLD) >= goldForArmy) {
+                if (p.getResource(Game.Resources.GOLD) + p.getPopulation()*goldProd - p.getMilitary()*goldPerSoldier >= goldForArmy) {
                     if (p.getName().equals(self.getName()))
                         continue;
                     if (p.getResource(Game.Resources.MILITARY) > largestArmy)
