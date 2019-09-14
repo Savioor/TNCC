@@ -57,4 +57,8 @@ public class Tuple3<T> implements Iterable<T> {
         asList.set(2,third);
         return asList.iterator();
     }
+
+    public int size(){
+        return 3;
+    }
 }

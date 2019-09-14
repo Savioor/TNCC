@@ -22,7 +22,7 @@ public class Game {
     private List<Player> players;
     private List<AbstractEvent> events;
     private GameConstants consts;
-    private Logger gameLogger;
+    private Logger logger;
     private int turn;
     private final long BOT_TIMEOUT = 20;
 
@@ -35,7 +35,10 @@ public class Game {
         events.add(new ProductionEvent(this));
         for (Player p : players)
             p.initialize(this);
-        gameLogger = new NamedLogger("GAME");
+        logger = new NamedLogger("GAME");
+        logger.setDebug(false);
+        logger.setInfo(true);
+        logger.setWarn(true);
         turn = 0;
     }
 
@@ -111,10 +114,11 @@ public class Game {
                 }
 
             }
-            gameLogger.warn(current.getName() + " executed Illegal action " + action.getName());
+            logger.warn(current.getName() + " executed Illegal action " + action.getName());
         }
 
-        gameLogger.debug(action.getName() + " was run by " + current.getName());
+        logger.debug(action.getName() + " was run by " + current.getName());
+
     }
 
     public Player getPlayerByNameOrId(String input){

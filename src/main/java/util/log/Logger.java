@@ -34,13 +34,13 @@ public abstract class Logger {
 
     protected abstract void log(OutputStream out, String message);
 
-    public final void info(String message){
+    public final synchronized void info(String message){
         log(infoOutputStream, message);
     }
-    public final void debug(String message){
+    public final synchronized void debug(String message){
         log(debugOutputStream, message);
     }
-    public final void warn(String message){
+    public final synchronized void warn(String message){
         log(warnOutputStream, message);
     }
 
