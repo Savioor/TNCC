@@ -1,4 +1,4 @@
-package util;
+package util.log;
 
 import java.io.OutputStream;
 

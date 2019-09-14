@@ -1,19 +1,27 @@
 package game;
 
+import util.log.Logger;
+import util.log.NamedLogger;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Competition {
 
     private Game current;
     private List<Player> players;
+    private Logger logger;
 
     public Competition(List<Player> players) {
         this.players = players;
+        this.logger = new NamedLogger("COMPETITION");
     }
 
     public List<Integer> runGame(List<Integer> order, GameConstants consts){
-        current = new Game(clonePlayers(order), consts);
+        List<Player> players = clonePlayers(order);
+        logger.info("Running new game with: " + Arrays.toString(players.toArray()));
+        current = new Game(players, consts);
         List<Player> winners;
         while(true){
             winners = current.executeCycle();

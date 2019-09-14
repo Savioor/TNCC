@@ -9,8 +9,8 @@ import game.actions.reactions.FailedReaction;
 import game.actions.reactions.Reaction;
 import game.actions.reactions.TradeReaction;
 import game.actions.reactions.WarReaction;
-import util.Logger;
-import util.NamedLogger;
+import util.log.Logger;
+import util.log.NamedLogger;
 
 import java.util.List;
 

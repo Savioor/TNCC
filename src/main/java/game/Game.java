@@ -6,8 +6,8 @@ import game.events.ProductionEvent;
 
 import java.util.ArrayList;
 import java.util.List;
-import util.Logger;
-import util.NamedLogger;
+import util.log.Logger;
+import util.log.NamedLogger;
 
 public class Game {
 
@@ -57,7 +57,7 @@ public class Game {
                     while (botThread.isAlive()){
                         if (System.currentTimeMillis() - timeStart > BOT_TIMEOUT){
                             botThread.interrupt();
-                            gameLogger.warn(p.getName() + " has taken too much time to respond");
+                            gameLogger.warn(p.getName() + " took too much time to respond");
                             break;
                         }
                     }
