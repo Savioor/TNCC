@@ -6,14 +6,15 @@ import game.actions.reactions.Reaction;
 import util.Tuple3;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class WarAction implements IAction {
 
     private Player attackedPlayer;
-    private List<Integer> attackingForcesDivision;
+    private Tuple3<Integer> attackingForcesDivision;
 
-    public WarAction(Player attacked, List<Integer> attackingForcesDivision) {
+    public WarAction(Player attacked, Tuple3<Integer> attackingForcesDivision) {
         this.attackedPlayer = attacked;
         this.attackingForcesDivision = attackingForcesDivision;
     }
@@ -36,14 +37,11 @@ public class WarAction implements IAction {
         Player attacked = game.getPlayerByNameOrId(data.get(0));
         if (attacked == null)
             return new ErrorAction("Player " + data.get(0) + " could not be found");
-
-        List<Integer> attackingForces = new ArrayList<>();
-        for (int i = 1; i < data.size(); i++){
-            try{
-                attackingForces.add(Integer.parseInt(data.get(i)));
-            } catch (NumberFormatException e){
-                return new ErrorAction("Argument " + i + " was expected to be integer, got " + data.get(i));
-            }
+        Tuple3<Integer> attackingForces;
+        try{
+            attackingForces = new Tuple3<>(Integer.parseInt(data.get(1)), Integer.parseInt(data.get(2)), Integer.parseInt(data.get(3)));
+        } catch (NumberFormatException e){
+            return new ErrorAction("Arguments 1-3 was expected to be integers, got " + Arrays.toString(data.subList(1, 3).toArray()));
         }
 
         return new WarAction(attacked, attackingForces);
@@ -51,7 +49,6 @@ public class WarAction implements IAction {
 
     @Override
     public boolean execute(Game game, Player actor) {
-        if (attackingForcesDivision.size() != 3) return false;
         int sum = 0;
         for (Integer I : attackingForcesDivision){
             if (I < 0) return false;

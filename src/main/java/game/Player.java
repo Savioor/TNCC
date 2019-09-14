@@ -1,5 +1,6 @@
 package game;
 
+import bottools.GameWrapper;
 import game.actions.action_getters.IActionGetter;
 import game.actions.IAction;
 import game.actions.action_getters.IReActionGetter;
@@ -96,6 +97,30 @@ public class Player {
 
     public <T> Reaction<T> getReaction(List<String> action, Game game){
         return reactor.getReAction(action, game, this);
+    }
+
+    public boolean canGoToWar(GameWrapper game){
+        return this.getResource(Game.Resources.GOLD) < game.getConsts().goldForWar && this.isAlive();
+    }
+
+    public int getGold(){
+        return getResource(Game.Resources.GOLD);
+    }
+
+    public int getLand(){
+        return getResource(Game.Resources.LAND);
+    }
+
+    public int getMilitary(){
+        return getResource(Game.Resources.MILITARY);
+    }
+
+    public int getPopulation(){
+        return getResource(Game.Resources.POPULATION);
+    }
+
+    public int getFood(){
+        return getResource(Game.Resources.FOOD);
     }
 
     public String toString(){
