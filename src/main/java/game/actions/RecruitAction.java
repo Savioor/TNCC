@@ -5,14 +5,18 @@ import game.Player;
 import game.actions.reactions.Reaction;
 import jdk.jshell.spi.ExecutionControl;
 import util.Tuple2;
+import util.log.Logger;
+import util.log.NamedLogger;
 
 import java.util.List;
 
 public class RecruitAction implements IRespondableAction<Reaction> {
 
     private int toRecruit;
+    private Logger logger;
 
     public RecruitAction(int toRectuit){
+        this.logger = new NamedLogger("RECRUIT");
         this.toRecruit = toRectuit;
     }
 
@@ -47,6 +51,8 @@ public class RecruitAction implements IRespondableAction<Reaction> {
 
         actor.subtractResource(Game.Resources.POPULATION.ordinal(), toRecruit);
         actor.addResource(Game.Resources.MILITARY.ordinal(), toRecruit);
+
+        logger.info(String.format("%s recruited %d military", actor.getName(), toRecruit));
 
         return new Tuple2<>(true, null);
     }

@@ -81,6 +81,7 @@ public class Game {
             return alive;
         }
         turn++;
+        logger.info("Cycle finished");
         return null;
     }
 

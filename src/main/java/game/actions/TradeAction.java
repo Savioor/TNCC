@@ -5,6 +5,8 @@ import game.Player;
 import game.actions.reactions.Reaction;
 import game.actions.reactions.TradeReaction;
 import util.Tuple2;
+import util.log.Logger;
+import util.log.NamedLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +16,7 @@ public class TradeAction implements IRespondableAction<TradeReaction> {
     private Game.Resources giving, taking;
     private int givingAmount, takingAmount;
     private Player secondActor;
+    private Logger logger;
 
 
     @Override
@@ -117,6 +120,7 @@ public class TradeAction implements IRespondableAction<TradeReaction> {
         this.givingAmount = givingAmount;
         this.takingAmount = takingAmount;
         this.secondActor = secondActor;
+        this.logger = new NamedLogger("TRADE");
     }
 
     @Override
@@ -126,13 +130,19 @@ public class TradeAction implements IRespondableAction<TradeReaction> {
 
     @Override
     public boolean executeWithResponse(Game game, Player actor, Player reactor, TradeReaction reaction) {
-        if (!reaction.getReaction())
+        if (!reaction.getReaction()) {
+            logger.info(String.format("%s refused trade of %d %s for %d %s from %s",
+                    reaction.getName(), givingAmount, giving.name(), takingAmount, taking.name(), actor.getName()));
             return true;
+        }
 
         actor.subtractResource(giving, givingAmount);
         secondActor.addResource(giving, givingAmount);
         actor.addResource(taking, takingAmount);
         secondActor.subtractResource(taking, takingAmount);
+
+        logger.info(String.format("%s accepted trade of %d %s for %d %s from %s",
+                reaction.getName(), givingAmount, giving.name(), takingAmount, taking.name(), actor.getName()));
         return true;
     }
 

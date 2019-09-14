@@ -6,6 +6,8 @@ import game.actions.reactions.Reaction;
 import game.actions.reactions.WarReaction;
 import util.Tuple2;
 import util.Tuple3;
+import util.log.Logger;
+import util.log.NamedLogger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,10 +17,12 @@ public class WarAction implements IRespondableAction<WarReaction> {
 
     private Player attackedPlayer;
     private Tuple3<Integer> attackingForcesDivision;
+    private Logger logger;
 
     public WarAction(Player attacked, Tuple3<Integer> attackingForcesDivision) {
         this.attackedPlayer = attacked;
         this.attackingForcesDivision = attackingForcesDivision;
+        this.logger = new NamedLogger("WAR");
     }
 
     @Override
@@ -88,10 +92,17 @@ public class WarAction implements IRespondableAction<WarReaction> {
 
     @Override
     public boolean executeWithResponse(Game game, Player actor, Player reactor, WarReaction reaction) {
+
+        logger.info(String.format("%s attacked %s with (%d, %d, %d). %s defended with (%d, %d, %d).",
+                actor.getName(), attackedPlayer.getName(), attackingForcesDivision.first, attackingForcesDivision.second,
+                attackingForcesDivision.third, attackedPlayer.getName(), reaction.getReaction().first,
+                reaction.getReaction().second, reaction.getReaction().third));
+
         int sum = 0;
         for (Integer I : attackingForcesDivision){
             sum += I;
         }
+
 
         int tempSum = 0;
         for (Integer I : reaction.getReaction()){
@@ -128,6 +139,7 @@ public class WarAction implements IRespondableAction<WarReaction> {
             loser = actor;
             remainingMilitary = (int)(sumDefending - game.getConsts().attackingWave2Multiplier*sumAttacking);
         } else {
+            logger.info("There was a tie");
             return true; // Tie
         }
 
@@ -145,6 +157,9 @@ public class WarAction implements IRespondableAction<WarReaction> {
 
         if (loser.getResource(Game.Resources.POPULATION) <= 0)
             loser.setAlive(false);
+
+        logger.info(String.format("%s won with %d remaining.",
+                winner.getName(), remainingMilitary));
 
         return true;
     }

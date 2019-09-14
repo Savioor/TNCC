@@ -3,8 +3,9 @@ package game.events;
 import game.Game;
 import game.Player;
 import game.actions.RecruitAction;
+import util.log.Logger;
+import util.log.NamedLogger;
 
-import java.util.logging.Logger;
 
 public class ProductionEvent extends AbstractEvent {
 
@@ -16,7 +17,7 @@ public class ProductionEvent extends AbstractEvent {
 
     @Override
     public void initialize() {
-        logger = Logger.getLogger("production");
+        logger = new NamedLogger("PRODUCTION");
     }
 
     @Override
