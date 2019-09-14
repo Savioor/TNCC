@@ -24,12 +24,12 @@ public class NothingBot extends Bot {
     }
 
     @Override
-    public TradeReaction acceptTrade(GameWrapper game, Player self, Player other, Game.Resources getting, int gettingAmount, Game.Resources giving, int givingAmount) {
-        return new TradeReaction(false, Reaction.Status.OK);
+    public boolean acceptTrade(GameWrapper game, Player self, Player other, Game.Resources getting, int gettingAmount, Game.Resources giving, int givingAmount) {
+        return false;
     }
 
     @Override
-    public WarReaction fightWar(GameWrapper game, Player self, Player other, int attackingForces) {
-        return new WarReaction(new ThreeTupleInt(0,0,0), Reaction.Status.OK);
+    public ThreeTupleInt fightWar(GameWrapper game, Player self, Player other, int attackingForces) {
+        return new ThreeTupleInt(0,0,0);
     }
 }

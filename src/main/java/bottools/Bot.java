@@ -42,11 +42,11 @@ public abstract class Bot implements IBot, IActionGetter, IReActionGetter {
             Game.Resources giving = Game.Resources.valueOf(action.get(3));
             int givingAmount = Integer.parseInt(action.get(4));
             int takingAmount = Integer.parseInt(action.get(5));
-            return (Reaction<T>) acceptTrade(wrapper, player.getDummy(), other, getting, takingAmount, giving, givingAmount);
+            return (Reaction<T>) new TradeReaction(acceptTrade(wrapper, player.getDummy(), other, getting, takingAmount, giving, givingAmount), Reaction.Status.OK);
         } else if (reactionType.equals(dummyReactionWar.getName())){
             Player attacker = wrapper.getPlayerByNameOrId(action.get(1));
             int attackingAmount = Integer.parseInt(action.get(2));
-            return (Reaction<T>) fightWar(wrapper, player.getDummy(), attacker, attackingAmount);
+            return (Reaction<T>) new WarReaction(fightWar(wrapper, player.getDummy(), attacker, attackingAmount), Reaction.Status.OK);
         }
         return new FailedReaction<>();
     }

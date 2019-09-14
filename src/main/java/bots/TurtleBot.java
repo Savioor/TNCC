@@ -38,13 +38,13 @@ public class TurtleBot extends Bot {
     }
 
     @Override
-    public TradeReaction acceptTrade(GameWrapper game, Player self, Player other, Game.Resources getting, int gettingAmount, Game.Resources giving, int givingAmount) {
-        return new TradeReaction(false, Reaction.Status.OK);
+    public boolean acceptTrade(GameWrapper game, Player self, Player other, Game.Resources getting, int gettingAmount, Game.Resources giving, int givingAmount) {
+        return false;
     }
 
     @Override
-    public WarReaction fightWar(GameWrapper game, Player self, Player other, int attackingForces) {
+    public ThreeTupleInt fightWar(GameWrapper game, Player self, Player other, int attackingForces) {
         int thirdOfArmy = self.getResource(Game.Resources.MILITARY)/3;
-        return new WarReaction(new ThreeTupleInt(thirdOfArmy,thirdOfArmy,thirdOfArmy), Reaction.Status.OK);
+        return new ThreeTupleInt(thirdOfArmy,thirdOfArmy,thirdOfArmy);
     }
 }
