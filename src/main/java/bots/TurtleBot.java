@@ -9,6 +9,7 @@ import game.actions.RecruitAction;
 import game.actions.reactions.Reaction;
 import game.actions.reactions.TradeReaction;
 import game.actions.reactions.WarReaction;
+import util.ThreeTupleInt;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,9 +44,7 @@ public class TurtleBot extends Bot {
 
     @Override
     public WarReaction fightWar(GameWrapper game, Player self, Player other, int attackingForces) {
-        List<Integer> reaction = new ArrayList<>();
         int thirdOfArmy = self.getResource(Game.Resources.MILITARY)/3;
-        reaction.add(thirdOfArmy); reaction.add(thirdOfArmy); reaction.add(thirdOfArmy);
-        return new WarReaction(reaction, Reaction.Status.OK);
+        return new WarReaction(new ThreeTupleInt(thirdOfArmy,thirdOfArmy,thirdOfArmy), Reaction.Status.OK);
     }
 }

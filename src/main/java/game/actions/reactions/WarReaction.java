@@ -1,12 +1,13 @@
 package game.actions.reactions;
 
 import game.Game;
+import util.ThreeTupleInt;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class WarReaction extends Reaction<List<Integer>> {
-    public WarReaction(List<Integer> reaction, Status status) {
+public class WarReaction extends Reaction<ThreeTupleInt> {
+    public WarReaction(ThreeTupleInt reaction, Status status) {
         super(reaction, status);
     }
 
@@ -21,7 +22,7 @@ public class WarReaction extends Reaction<List<Integer>> {
     }
 
     @Override
-    public Reaction<List<Integer>> parse(Game game, List<String> data) {
+    public Reaction<ThreeTupleInt> parse(Game game, List<String> data) {
         if (data.size() != 3)
             return new WarReaction(null, Status.FAILED);
         List<Integer> flanks = new ArrayList<>();
@@ -32,6 +33,6 @@ public class WarReaction extends Reaction<List<Integer>> {
                 return new WarReaction(null, Status.FAILED);
             }
         }
-        return new WarReaction(flanks, Status.OK);
+        return new WarReaction(new ThreeTupleInt(flanks.get(0), flanks.get(1), flanks.get(2)), Status.OK);
     }
 }
