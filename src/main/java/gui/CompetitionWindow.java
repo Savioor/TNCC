@@ -20,6 +20,8 @@ public class CompetitionWindow extends JFrame implements ActionListener {
 	private Competition competition;
     private ColumnGraph columnGraph;
 
+    private GameConstants constants;
+
     // widgets
     private JButton runWarButton;
 
@@ -32,11 +34,12 @@ public class CompetitionWindow extends JFrame implements ActionListener {
 
 	private List<List<Integer>> permutations;
 
-    public CompetitionWindow(Competition competition) {
+    public CompetitionWindow(Competition competition, GameConstants constants) {
         super("TNCC 2 - Alexey Shapovalov & Ido Heinemann");
         getContentPane().setLayout(new BorderLayout());
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.competition = competition;
+        this.constants = constants;
         this.permutations = getAllPermutations(competition.getGroupNames().length - 1);
         competitionInterrupted = false;
 
@@ -78,9 +81,8 @@ public class CompetitionWindow extends JFrame implements ActionListener {
 
     public void playUntilStopped(){
         List<Integer> winners;
-        GameConstants consts = new GameConstants();
         for (List<Integer> permutation : permutations){
-            winners = competition.runGame(permutation, consts);
+            winners = competition.runGame(permutation, constants);
             for (Integer i : winners){
                 updateScore(i, 1.0f / winners.size());
             }

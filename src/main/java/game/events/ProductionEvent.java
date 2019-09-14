@@ -41,17 +41,17 @@ public class ProductionEvent extends AbstractEvent {
                 p.subtractResource(Game.Resources.GOLD.ordinal(),
                         (int)(p.getResource(Game.Resources.MILITARY.ordinal())*game.getConsts().armyGoldConsumption));
 
-                if (p.getResource(Game.Resources.GOLD.ordinal()) < 0){
+                if (p.getResource(Game.Resources.GOLD.ordinal()) <= 0){
                     p.setResource(Game.Resources.GOLD.ordinal(), 0);
                     new RecruitAction(-p.getResource(Game.Resources.MILITARY.ordinal())).execute(game, p);
                 }
 
-                if (p.getResource(Game.Resources.FOOD.ordinal()) < 0){
+                if (p.getResource(Game.Resources.FOOD.ordinal()) <= 0){
                     p.setResource(Game.Resources.FOOD.ordinal(), 0);
                     p.subtractResource(Game.Resources.POPULATION.ordinal(), 200);
                 }
 
-                if (p.getResource(Game.Resources.POPULATION.ordinal()) < 0){
+                if (p.getResource(Game.Resources.POPULATION.ordinal()) <= 0){
                     p.setAlive(false);
                     logger.info(p.getName() + " lost the game");
                 }

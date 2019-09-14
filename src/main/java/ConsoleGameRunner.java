@@ -48,7 +48,7 @@ public class ConsoleGameRunner {
 
         }
 
-        Game game = new Game(players, new GameConstants());
+        Game game = new Game(players, new GameConstants(GameConstants.ConstantsGroup.DEFAULT));
 
         while (true){
             game.executeCycle();
