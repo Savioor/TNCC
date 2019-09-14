@@ -3,7 +3,7 @@ package game.actions;
 import game.Game;
 import game.Player;
 import game.actions.reactions.Reaction;
-import util.ThreeTupleInt;
+import util.Tuple3;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +66,7 @@ public class WarAction implements IAction {
         message.add("attack");
         message.add(actor.getName());
         message.add(Integer.toString(sum));
-        Reaction<ThreeTupleInt> action;
+        Reaction<Tuple3<Integer>> action;
 
         int tempSum = 0;
 
@@ -74,9 +74,9 @@ public class WarAction implements IAction {
             action = attackedPlayer.getReaction(message, game);
             if (action.getStatus().equals(Reaction.Status.OK)){
                 boolean failed = false;
-                for (Integer I : action.getReaction()){
-                    if (I < 0) failed = true;
-                    tempSum += I;
+                for (Integer i : action.getReaction()){
+                    if (i < 0) failed = true;
+                    tempSum += i;
                 }
                 if (attackedPlayer.getResource(Game.Resources.MILITARY) < tempSum) failed = true;
                 if (!failed)

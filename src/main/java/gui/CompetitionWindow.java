@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * @author BS
  */
-public class CompetitionWindow extends JFrame implements ActionListener, ScoreChangeEvent {
+public class CompetitionWindow extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	
 	private Competition competition;
@@ -94,7 +94,7 @@ public class CompetitionWindow extends JFrame implements ActionListener, ScoreCh
         competitionInterrupted = false;
     }
 
-    public List<List<Integer>> getAllPermutations(int n){
+    private static List<List<Integer>> getAllPermutations(int n){
         if (n > 6){
             throw new RuntimeException("getAllPermutations supports only n < 7");
         }
@@ -110,185 +110,13 @@ public class CompetitionWindow extends JFrame implements ActionListener, ScoreCh
             for (int i = 0; i <= perm.size(); i++){
                 perm.add(i, n);
                 retList.add(new ArrayList<>(perm));
-                perm.remove(i);
+                final Integer remove = perm.remove(i);
             }
         }
         return retList;
     }
 
-    public void updateScore(int index, float value) {
+    private void updateScore(int index, float value) {
         columnGraph.addToValue(index, value);
     }
-
-    /**
-     * Starts a new war.
-     * @return whether or not a new war was started.
-     */
-    /*public boolean runWar() {
-        try {
-            long seedValue;
-            if (seed.getText().startsWith(SEED_PREFIX)){
-                seedValue = Long.parseLong(seed.getText().substring(SEED_PREFIX.length()));
-            }
-            else {
-                seedValue = seed.getText().hashCode();
-            }
-            competition.setSeed(seedValue);
-            final int battlesPerGroup = Integer.parseInt(
-                battlesPerGroupField.getText().trim());
-            final int warriorsPerGroup = Integer.parseInt(
-                warriorsPerGroupField.getText().trim());
-            if (competition.getWarriorRepository().getNumberOfGroups() < warriorsPerGroup) {
-                JOptionPane.showMessageDialog(this,
-                    "Not enough survivors (got " +
-                    competition.getWarriorRepository().getNumberOfGroups() +
-                    " but " + warriorsPerGroup + " are needed)");
-                return false;
-            }
-            warThread = new Thread("CompetitionThread") {
-                @Override
-                public void run() {
-                    try {
-                        competition.runCompetition(battlesPerGroup, warriorsPerGroup, startPausedCheckBox.isSelected());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                };
-            };
-            if (!competitionRunning) {
-            	warThread.start();
-            	return true;
-            }
-        } catch (NumberFormatException e2) {
-            JOptionPane.showMessageDialog(this, "Error in configuration");
-        }
-        return false;
-    }
-
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == runWarButton) {
-        	showBattleFrameIfNeeded();
-        	switch (runWarButton.getText().trim()){
-                case "<html><font color=red>Start!</font></html>":
-                    if (runWar()) {
-                        competitionRunning = true;
-                    }
-                    break;
-                case ("<html><font color=red>Stop!</font></html>"):
-                    competition.setAbort(true);
-                    competitionRunning = false;
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
-
-    public void onWarStart() {
-    	showBattleFrameIfNeeded();
-    }
-
-    private void showBattleFrameIfNeeded() {
-    	if (showBattleCheckBox.isSelected() && battleFrame == null ) {
-    		showBattleRoom();
-    		showBattleCheckBox.setSelected(false);
-    	}
-    }
-    
-    private void showBattleRoom() {
-        competition.setSpeed(5);
-        battleFrame = new WarFrame(competition);
-        battleFrame.addWindowListener(new WindowListener() {
-            public void windowOpened(WindowEvent e) {
-            }
-
-            public void windowClosing(WindowEvent e) {
-            }
-
-            public void windowClosed(WindowEvent e) {
-                //System.out.println("BattleFrame=null");
-                battleFrame = null;
-                competition.setSpeed(Competition.MAXIMUM_SPEED);
-            }
-
-            public void windowIconified(WindowEvent e) {
-            }
-
-            public void windowDeiconified(WindowEvent e) {
-            }
-
-            public void windowActivated(WindowEvent e) {
-            }
-
-            public void windowDeactivated(WindowEvent e) {
-            }
-        });
-        
-        competition.addMemoryEventLister(battleFrame);
-        competition.addCompetitionEventListener(battleFrame);
-        Rectangle battleFrameRect = new Rectangle(0, getY(), 750, 700);
-        Rectangle screen = getGraphicsConfiguration().getBounds(); //for multiple monitors
-           
-        if (getX() + getWidth() <= screen.getX() + screen.getWidth()
-        		- battleFrameRect.width)
-        {
-        	battleFrameRect.x = getX() + getWidth();
-        }
-        else if (screen.getX() + screen.getWidth() - battleFrameRect.width
-        	- getWidth() >= screen.getX())
-        {
-        	setLocation((int) (screen.getX() + screen.getWidth() - battleFrameRect.width
-        			- getWidth()), getY());
-        	battleFrameRect.x = getX() + getWidth();
-        }
-        else
-        {
-        	setLocation((int)screen.getX(), getY());
-        	battleFrameRect.x = getWidth();
-        }
-               
-        battleFrame.setBounds(battleFrameRect);
-        battleFrame.setVisible(true);
-    }
-
-    public void onWarEnd(int reason, String winners) {
-        warCounter++;
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                warCounterDisplay.setText("Wars so far:" + warCounter +
-                    " (out of " + totalWars + ")");
-            };
-        });
-    }
-
-    public void onRound(int round) {
-    }
-
-    public void onWarriorBirth(String warriorName) {
-    }
-
-    public void onWarriorDeath(String warriorName, String reason) {
-    }
-
-    public void onCompetitionStart() {
-        warCounter = 0;
-        totalWars = competition.getTotalNumberOfWars();
-        competition.setAbort(false);
-        runWarButton.setText("<html><font color=red>Stop!</font></html>");
-    }
-
-    public void onCompetitionEnd() {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                warCounterDisplay.setText("The competition is over. " +
-                    warCounter + " wars were run.");
-            };
-        });
-        warThread = null;
-        runWarButton.setText("<html><font color=red>Start!</font></html>");
-		competitionRunning = false;
-    }
-
-	*/
 }

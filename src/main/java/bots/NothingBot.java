@@ -2,19 +2,11 @@ package bots;
 
 import bottools.Bot;
 import bottools.GameWrapper;
-import bottools.IBot;
 import game.Game;
 import game.Player;
 import game.actions.IAction;
 import game.actions.WaitAction;
-import game.actions.WarAction;
-import game.actions.reactions.Reaction;
-import game.actions.reactions.TradeReaction;
-import game.actions.reactions.WarReaction;
-import util.ThreeTupleInt;
-
-import java.util.ArrayList;
-import java.util.List;
+import util.Tuple3;
 
 public class NothingBot extends Bot {
 
@@ -29,7 +21,7 @@ public class NothingBot extends Bot {
     }
 
     @Override
-    public ThreeTupleInt fightWar(GameWrapper game, Player self, Player other, int attackingForces) {
-        return new ThreeTupleInt(0,0,0);
+    public Tuple3<Integer> fightWar(GameWrapper game, Player self, Player other, int attackingForces) {
+        return new Tuple3<>(0,0,0);
     }
 }
