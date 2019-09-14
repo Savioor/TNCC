@@ -3,11 +3,12 @@ package game.actions;
 import game.Game;
 import game.Player;
 import game.actions.reactions.Reaction;
+import game.actions.reactions.TradeReaction;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TradeAction implements IAction {
+public class TradeAction implements IResponableAction<TradeReaction> {
 
     private Game.Resources giving, taking;
     private int givingAmount, takingAmount;
@@ -128,5 +129,15 @@ public class TradeAction implements IAction {
         this.givingAmount = givingAmount;
         this.takingAmount = takingAmount;
         this.secondActor = secondActor;
+    }
+
+    @Override
+    public boolean validateResponse(Reaction<TradeReaction> reaction) {
+        return reaction.getStatus().equals(Reaction.Status.OK);
+    }
+
+    @Override
+    public boolean executeWithResponse(Game game, Player actor, Player reactor, Reaction<TradeReaction> reaction) {
+        return false;
     }
 }
