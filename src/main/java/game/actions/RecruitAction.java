@@ -37,14 +37,17 @@ public class RecruitAction implements IAction {
     }
 
     @Override
-    public boolean execute(Game game, Player actor) {
-        if (actor.getResource(Game.Resources.POPULATION.ordinal()) - toRecruit < 0
-        || actor.getResource(Game.Resources.MILITARY.ordinal()) + toRecruit < 0)
-            return false;
+    public final ActionInfo execute(Game game, Player actor) {
+        if(toRecruit < 0) {
+            return new ActionInfo(false, "trying to recruit negative amount: " + toRecruit);
+        }
+        if (actor.getPopulation() - toRecruit < 0){
+            return new ActionInfo(false, "trying to recruit " + toRecruit +" but population is only " + actor.getPopulation());
+        }
 
         actor.subtractResource(Game.Resources.POPULATION.ordinal(), toRecruit);
         actor.addResource(Game.Resources.MILITARY.ordinal(), toRecruit);
 
-        return true;
+        return new ActionInfo(true, actor + " recruited " + toRecruit);
     }
 }

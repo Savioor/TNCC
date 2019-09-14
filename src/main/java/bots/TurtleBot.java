@@ -10,6 +10,11 @@ import util.Tuple3;
 
 public class TurtleBot extends Bot {
     @Override
+    public void reset(GameWrapper game, Player self) {
+
+    }
+
+    @Override
     public IAction getBotAction(GameWrapper game, Player self) {
         double foodPerArmy = game.getConsts().armyFoodConsumption;
         double goldForArmy = game.getConsts().goldForWar;

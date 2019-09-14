@@ -57,4 +57,9 @@ public class Tuple3<T> implements Iterable<T> {
         asList.set(2,third);
         return asList.iterator();
     }
+
+    @Override
+    public String toString(){
+        return new StringBuilder().append("(").append(first).append(", ").append(second).append(", ").append(third).append(")").toString();
+    }
 }

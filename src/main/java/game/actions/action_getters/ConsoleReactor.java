@@ -18,7 +18,7 @@ public class ConsoleReactor implements IReActionGetter {
     private List<Reaction> reactions;
 
     @Override
-    public <T> Reaction<T> getReAction(List<String> action, Game game, Player player) {
+    public <T> Reaction<T> getReaction(List<String> action, Game game, Player player) {
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n");
         System.out.println("------------------");
         System.out.println(player.getName() + ", Your reaction is required!");

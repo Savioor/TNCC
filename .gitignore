@@ -23,3 +23,6 @@
 hs_err_pid*
 
 .idea/**
+
+# for earlier versions of IntelliJ
+TNCC.iml

@@ -8,7 +8,7 @@ import game.actions.reactions.Reaction;
 
 import java.util.List;
 
-public class Player {
+public class Player implements Cloneable{
 
     private int[] resources;
     private String name;
@@ -31,7 +31,11 @@ public class Player {
     }
 
     public Player clone(){
-        return new Player(this.name, actor, reactor, isBot);
+        try{
+            return (Player)super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Player getDummy(){
@@ -96,11 +100,11 @@ public class Player {
     }
 
     public <T> Reaction<T> getReaction(List<String> action, Game game){
-        return reactor.getReAction(action, game, this);
+        return reactor.getReaction(action, game, this);
     }
 
     public boolean canGoToWar(GameWrapper game){
-        return this.getResource(Game.Resources.GOLD) < game.getConsts().goldForWar && this.isAlive();
+        return this.getGold() >= game.getConsts().goldForWar && this.isAlive();
     }
 
     public int getGold(){
@@ -125,5 +129,27 @@ public class Player {
 
     public String toString(){
         return getName();
+    }
+
+    public boolean canAttack(GameWrapper game, Player other){
+        return (!other.equals(this)) && other.isAlive() && this.canGoToWar(game);
+    }
+
+    public boolean canTradeWith(GameWrapper game, Player other){
+        return (!other.equals(this)) && other.isAlive();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null){
+            return false;
+        }
+        if(obj == this){
+            return true;
+        }
+        if(obj instanceof Player){
+            return getName().equals(((Player)obj).getName());
+        }
+        return false;
     }
 }

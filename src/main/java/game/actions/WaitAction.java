@@ -24,7 +24,7 @@ public class WaitAction implements IAction {
     }
 
     @Override
-    public boolean execute(Game game, Player actor) {
-        return true;
+    public final ActionInfo execute(Game game, Player actor) {
+        return new ActionInfo(true, actor + " is doing nothing this turn");
     }
 }

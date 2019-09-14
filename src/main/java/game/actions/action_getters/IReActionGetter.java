@@ -9,6 +9,6 @@ import java.util.List;
 @FunctionalInterface
 public interface IReActionGetter {
 
-    <T> Reaction<T> getReAction(List<String> action, Game game, Player player);
+    <T> Reaction<T> getReaction(List<String> action, Game game, Player player);
 
 }

@@ -21,13 +21,18 @@ public class WarBot extends Bot {
     }
 
     @Override
+    public void reset(GameWrapper game, Player self) {
+
+    }
+
+    @Override
     public IAction getBotAction(GameWrapper game, Player self) {
         if(self.getResource(Game.Resources.MILITARY) != 0 && self.canGoToWar(game)) {
             List<Player> playerList = game.getPlayers();
             Player attacked = null;
             while (attacked == null) {
                 attacked = playerList.get(rand.nextInt(playerList.size()));
-                if (attacked == self) {
+                if (!self.canAttack(game, attacked)) {
                     attacked = null;
                 }
             }
@@ -35,7 +40,7 @@ public class WarBot extends Bot {
             return new WarAction(attacked, new Tuple3<>(thirdOfArmy, thirdOfArmy, thirdOfArmy));
         }
         else if (self.getMilitary() <= 0){
-            return new RecruitAction(self.getResource(Game.Resources.POPULATION) / 2);
+            return new RecruitAction(self.getPopulation() / 10);
         }
         else{
             return new WaitAction();

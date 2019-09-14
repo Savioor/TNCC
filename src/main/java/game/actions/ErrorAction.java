@@ -25,9 +25,8 @@ public class ErrorAction implements IAction {
     }
 
     @Override
-    public boolean execute(Game game, Player actor) {
-        System.err.println(reason);
-        return false;
+    public final ActionInfo execute(Game game, Player actor) {
+        return new ActionInfo(false, reason);
     }
 
     public ErrorAction(String reason){

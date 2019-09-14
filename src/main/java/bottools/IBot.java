@@ -8,6 +8,7 @@ import util.Tuple3;
 
 public interface IBot {
 
+    void reset(GameWrapper game, Player self);
     IAction getBotAction(GameWrapper game, Player self);
     boolean acceptTrade(GameWrapper game, Player self, Player other,
                                         Game.Resources getting, int gettingAmount, Game.Resources giving, int givingAmount);

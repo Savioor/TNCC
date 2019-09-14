@@ -9,13 +9,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static game.actions.IAction.ActionInfo;
+
 public class WarAction implements IAction {
 
-    private Player attackedPlayer;
-    private Tuple3<Integer> attackingForcesDivision;
+    private final String attackedPlayerName;
+    private final Tuple3<Integer> attackingForcesDivision;
 
     public WarAction(Player attacked, Tuple3<Integer> attackingForcesDivision) {
-        this.attackedPlayer = attacked;
+        this.attackedPlayerName = attacked.getName();
         this.attackingForcesDivision = attackingForcesDivision;
     }
 
@@ -38,9 +40,9 @@ public class WarAction implements IAction {
         if (attacked == null)
             return new ErrorAction("Player " + data.get(0) + " could not be found");
         Tuple3<Integer> attackingForces;
-        try{
+        try {
             attackingForces = new Tuple3<>(Integer.parseInt(data.get(1)), Integer.parseInt(data.get(2)), Integer.parseInt(data.get(3)));
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             return new ErrorAction("Arguments 1-3 was expected to be integers, got " + Arrays.toString(data.subList(1, 3).toArray()));
         }
 
@@ -48,16 +50,20 @@ public class WarAction implements IAction {
     }
 
     @Override
-    public boolean execute(Game game, Player actor) {
+    public final ActionInfo execute(Game game, Player actor) {
         int sum = 0;
-        for (Integer I : attackingForcesDivision){
-            if (I < 0) return false;
+        for (Integer I : attackingForcesDivision) {
+            if (I < 0) return new ActionInfo(false, "negative attacking force division: " + attackingForcesDivision);
             sum += I;
         }
-        if (actor.getResource(Game.Resources.MILITARY) < sum) return false;
-        if (attackedPlayer.equals(actor)) return false;
-        if (!attackedPlayer.isAlive()) return false;
-        if (actor.getResource(Game.Resources.GOLD) < game.getConsts().goldForWar) return false;
+        Player attackedPlayer = game.getPlayerByName(attackedPlayerName);
+        if (actor.getMilitary() < sum)
+            return new ActionInfo(false, "attempted to use " + sum + " military, but military size is " + actor.getMilitary());
+        if (attackedPlayer.equals(actor)) return new ActionInfo(false, "attempted to attack self");
+        if (!attackedPlayer.isAlive())
+            return new ActionInfo(false, "attempting to attack dead player: " + attackedPlayer);
+        if (actor.getGold() < game.getConsts().goldForWar)
+            return new ActionInfo(false, "needs at least " + game.getConsts().goldForWar + " to go to war, but has only " + actor.getGold());
 
         List<String> message = new ArrayList<>();
         message.add("attack");
@@ -67,11 +73,11 @@ public class WarAction implements IAction {
 
         int tempSum = 0;
 
-        while (true){
+        while (true) {
             action = attackedPlayer.getReaction(message, game);
-            if (action.getStatus().equals(Reaction.Status.OK)){
+            if (action.getStatus().equals(Reaction.Status.OK)) {
                 boolean failed = false;
-                for (Integer i : action.getReaction()){
+                for (Integer i : action.getReaction()) {
                     if (i < 0) failed = true;
                     tempSum += i;
                 }
@@ -83,18 +89,18 @@ public class WarAction implements IAction {
 
         attackedPlayer.subtractResource(Game.Resources.MILITARY, tempSum);
         actor.subtractResource(Game.Resources.MILITARY, sum);
-        actor.subtractResource(Game.Resources.GOLD, (int)game.getConsts().goldForWar);
+        actor.subtractResource(Game.Resources.GOLD, (int) game.getConsts().goldForWar);
 
         int tempAttacking, tempDefending;
-        for (int i = 0; i < 3; i++){
+        for (int i = 0; i < 3; i++) {
             tempAttacking = attackingForcesDivision.get(i);
             tempDefending = action.getReaction().get(i);
-            attackingForcesDivision.set(i, Math.max(0, (int)(attackingForcesDivision.get(i) - game.getConsts().defendingWave1Multiplier*tempDefending)));
-            action.getReaction().set(i, (int)Math.max(Math.min(0, game.getConsts().defendingWave1Multiplier*tempDefending - tempAttacking), 0));
+            attackingForcesDivision.set(i, Math.max(0, (int) (attackingForcesDivision.get(i) - game.getConsts().defendingWave1Multiplier * tempDefending)));
+            action.getReaction().set(i, (int) Math.max(Math.min(0, game.getConsts().defendingWave1Multiplier * tempDefending - tempAttacking), 0));
         }
 
         int sumAttacking = 0, sumDefending = 0;
-        for (int i = 0; i < 3; i++){
+        for (int i = 0; i < 3; i++) {
             sumAttacking += attackingForcesDivision.get(i);
             sumDefending += action.getReaction().get(i);
         }
@@ -102,21 +108,21 @@ public class WarAction implements IAction {
         Player winner, loser;
         int remainingMilitary;
 
-        if (game.getConsts().attackingWave2Multiplier*sumAttacking > sumDefending){
+        if (game.getConsts().attackingWave2Multiplier * sumAttacking > sumDefending) {
             winner = actor;
             loser = attackedPlayer;
-            remainingMilitary = (int)Math.min(game.getConsts().attackingWave2Multiplier*sumAttacking - sumDefending, sumAttacking);
-        } else if (game.getConsts().attackingWave2Multiplier*sumAttacking < sumDefending) {
+            remainingMilitary = (int) Math.min(game.getConsts().attackingWave2Multiplier * sumAttacking - sumDefending, sumAttacking);
+        } else if (game.getConsts().attackingWave2Multiplier * sumAttacking < sumDefending) {
             winner = attackedPlayer;
             loser = actor;
-            remainingMilitary = (int)(sumDefending - game.getConsts().attackingWave2Multiplier*sumAttacking);
+            remainingMilitary = (int) (sumDefending - game.getConsts().attackingWave2Multiplier * sumAttacking);
         } else {
-            return true; // Tie
+            return new ActionInfo(true, "War ended in tie"); // Tie
         }
 
         int subtracted;
-        for (Game.Resources res : Game.Resources.values()){
-            subtracted = (int)(remainingMilitary * game.getConsts().getStealingFactor(res));
+        for (Game.Resources res : Game.Resources.values()) {
+            subtracted = (int) (remainingMilitary * game.getConsts().getStealingFactor(res));
             if (loser.getResource(res) < subtracted)
                 subtracted = loser.getResource(res);
 
@@ -129,6 +135,6 @@ public class WarAction implements IAction {
         if (loser.getResource(Game.Resources.POPULATION) <= 0)
             loser.setAlive(false);
 
-        return true;
+        return new ActionInfo(true, "War ended, " + winner + " won & " + loser + "lost");
     }
 }

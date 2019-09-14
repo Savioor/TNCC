@@ -9,6 +9,7 @@ import game.actions.reactions.FailedReaction;
 import game.actions.reactions.Reaction;
 import game.actions.reactions.TradeReaction;
 import game.actions.reactions.WarReaction;
+import util.Tuple3;
 import util.log.Logger;
 import util.log.NamedLogger;
 
@@ -39,7 +40,7 @@ public abstract class Bot implements IBot, IActionGetter, IReActionGetter {
     }
 
     @Override
-    public final <T> Reaction<T> getReAction(List<String> action, Game game, Player player) {
+    public final <T> Reaction<T> getReaction(List<String> action, Game game, Player player) {
         initData(game, player.getName());
         String reactionType = action.get(0);
         if (reactionType.equals(dummyReactionTrade.getName())){
@@ -48,11 +49,22 @@ public abstract class Bot implements IBot, IActionGetter, IReActionGetter {
             Game.Resources giving = Game.Resources.valueOf(action.get(3));
             int givingAmount = Integer.parseInt(action.get(4));
             int takingAmount = Integer.parseInt(action.get(5));
-            return (Reaction<T>) new TradeReaction(acceptTrade(wrapper, player.getDummy(), other, getting, takingAmount, giving, givingAmount), Reaction.Status.OK);
+            try {
+                return (Reaction<T>) new TradeReaction(acceptTrade(wrapper, player.getDummy(), other, getting, takingAmount, giving, givingAmount), Reaction.Status.OK);
+            } catch (Throwable t){
+                return (Reaction<T>) new TradeReaction(false, Reaction.Status.OK);
+            }
         } else if (reactionType.equals(dummyReactionWar.getName())){
             Player attacker = wrapper.getPlayerByNameOrId(action.get(1));
             int attackingAmount = Integer.parseInt(action.get(2));
-            return (Reaction<T>) new WarReaction(fightWar(wrapper, player.getDummy(), attacker, attackingAmount), Reaction.Status.OK);
+            try {
+                Tuple3<Integer> reactors = fightWar(wrapper, player.getDummy(), attacker, attackingAmount);
+                assert reactors.first + reactors.second + reactors.third <= player.getMilitary();
+                assert reactors.first >= 0 && reactors.second >= 0 && reactors.third >= 0;
+                return (Reaction<T>) new WarReaction(reactors, Reaction.Status.OK);
+            } catch (Throwable t){
+                return (Reaction<T>) new WarReaction(new Tuple3<>(0, 0, 0), Reaction.Status.OK);
+            }
         }
         return new FailedReaction<>();
     }

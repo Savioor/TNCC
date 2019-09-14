@@ -11,7 +11,7 @@ public class TradeAction implements IAction {
 
     private Game.Resources giving, taking;
     private int givingAmount, takingAmount;
-    private Player secondActor;
+    private String secondActorName;
 
 
     @Override
@@ -83,19 +83,20 @@ public class TradeAction implements IAction {
     }
 
     @Override
-    public boolean execute(Game game, Player actor) {
+    public final ActionInfo execute(Game game, Player actor) {
+        Player secondActor = game.getPlayerByName(secondActorName);
         if (actor.equals(secondActor))
-            return false;
+            return new ActionInfo(false, "trying to trade with self");
         if (!secondActor.isAlive())
-            return false;
+            return new ActionInfo(false, "trying to trade with dead actor: " + secondActor);
         if (givingAmount < 0 || takingAmount < 0)
-            return false;
+            return new ActionInfo(false, "trying to trade negative amount: giving => " + givingAmount + " & taking => " + takingAmount);
         if (!(giving.equals(Game.Resources.GOLD) || taking.equals(Game.Resources.GOLD)))
-            return false;
+            return new ActionInfo(false, "trying to trade " + giving + " for " + taking + ", but none of those resources is gold");
         if (actor.getResource(giving) - givingAmount < 0)
-            return false;
+            return new ActionInfo(false, "trying to give " + givingAmount + ", but has only " + actor.getResource(giving));
         if (secondActor.getResource(taking) - takingAmount < 0)
-            return false;
+            return new ActionInfo(false, "trying to take " + takingAmount + ", but " + secondActor + " has only " + secondActor.getResource(taking));
 
         List<String> message = new ArrayList<>();
         message.add("trade");
@@ -113,13 +114,13 @@ public class TradeAction implements IAction {
         }
 
         if (!reaction.getReaction())
-            return true;
+            return new ActionInfo(true, secondActorName + " rejected trade from " + actor);
 
         actor.subtractResource(giving, givingAmount);
         secondActor.addResource(giving, givingAmount);
         actor.addResource(taking, takingAmount);
         secondActor.subtractResource(taking, takingAmount);
-        return true;
+        return new ActionInfo(true, secondActorName + " accepted trade from " + actor);
     }
 
     public TradeAction(Game.Resources giving, Game.Resources taking, int givingAmount, int takingAmount, Player secondActor) {
@@ -127,6 +128,6 @@ public class TradeAction implements IAction {
         this.taking = taking;
         this.givingAmount = givingAmount;
         this.takingAmount = takingAmount;
-        this.secondActor = secondActor;
+        this.secondActorName = secondActor.getName();
     }
 }

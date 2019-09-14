@@ -7,10 +7,19 @@ import java.util.List;
 
 public interface IAction {
 
+    public static class ActionInfo{
+        public final boolean success;
+        public final String message;
+        public ActionInfo(boolean success, String message){
+            this.success = success;
+            this.message = message;
+        }
+    }
+
     String getInfo();
     String getName();
     IAction parse(Game game, List<String> data);
 
-    boolean execute(Game game, Player actor);
+    ActionInfo execute(Game game, Player actor);
 
 }
