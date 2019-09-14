@@ -14,7 +14,7 @@ public class Game {
     private List<Player> players;
     private List<AbstractEvent> events;
     private GameConstants consts;
-    private Logger gameLogger;
+    private Logger logger;
     private int turn;
     private final long BOT_TIMEOUT = 20;
 
@@ -25,7 +25,10 @@ public class Game {
         events.add(new ProductionEvent(this));
         for (Player p : players)
             p.initialize(this);
-        gameLogger = new NamedLogger("GAME");
+        logger = new NamedLogger("GAME");
+        logger.setDebug(false);
+        logger.setInfo(true);
+        logger.setWarn(true);
         turn = 0;
     }
 
@@ -57,7 +60,7 @@ public class Game {
                     while (botThread.isAlive()){
                         if (System.currentTimeMillis() - timeStart > BOT_TIMEOUT){
                             botThread.interrupt();
-                            gameLogger.warn(p.getName() + " took too much time to respond");
+                            logger.warn(p.getName() + " took too much time to respond");
                             break;
                         }
                     }
@@ -93,10 +96,10 @@ public class Game {
             action = current.getAction(this);
             if (action.execute(this, current))
                 break;
-            gameLogger.warn(current.getName() + " executed Illegal action " + action.getName());
+            logger.warn(current.getName() + " executed Illegal action " + action.getName());
         }
 
-        gameLogger.debug(action.getName() + " was run by " + current.getName());
+        logger.debug(action.getName() + " was run by " + current.getName());
 
     }
 
