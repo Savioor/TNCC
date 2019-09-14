@@ -132,17 +132,17 @@ public class TradeAction implements IRespondableAction<TradeReaction> {
     public boolean executeWithResponse(Game game, Player actor, Player reactor, TradeReaction reaction) {
         if (!reaction.getReaction()) {
             logger.info(String.format("%s refused trade of %d %s for %d %s from %s",
-                    reaction.getName(), givingAmount, giving.name(), takingAmount, taking.name(), actor.getName()));
+                    reactor.getName(), givingAmount, giving.name(), takingAmount, taking.name(), actor.getName()));
             return true;
         }
 
         actor.subtractResource(giving, givingAmount);
-        secondActor.addResource(giving, givingAmount);
+        reactor.addResource(giving, givingAmount);
         actor.addResource(taking, takingAmount);
-        secondActor.subtractResource(taking, takingAmount);
+        reactor.subtractResource(taking, takingAmount);
 
         logger.info(String.format("%s accepted trade of %d %s for %d %s from %s",
-                reaction.getName(), givingAmount, giving.name(), takingAmount, taking.name(), actor.getName()));
+                reactor.getName(), givingAmount, giving.name(), takingAmount, taking.name(), actor.getName()));
         return true;
     }
 

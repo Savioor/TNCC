@@ -44,8 +44,18 @@ public class BlitzBot extends Bot {
                 return new RecruitAction(-self.getResource(Game.Resources.MILITARY));
             }
 
+            Player smallestArmyOwner = game.getPlayers().get(0);
+            for (Player p : game.getPlayers()) {
+                if (p.getName().equals(self.getName()) || !p.isAlive())
+                    continue;
+                if (p.getResource(Game.Resources.MILITARY) < smallestArmyOwner.getMilitary())
+                    smallestArmyOwner = p;
+            }
+
             int minimumPop = (int) ((self.getTotalPopulation()*foodPerArmy) / (foodProd + foodPerArmy)) + 1;
-            int toRecruit = Math.min(largestArmy - self.getResource(Game.Resources.MILITARY), self.getPopulation() - minimumPop);
+            int toRecruit = Math.min(Math.min(largestArmy - self.getResource(Game.Resources.MILITARY),
+                    self.getPopulation() - minimumPop),
+                    smallestArmyOwner.getMilitary() - self.getMilitary() + 1);
             return new RecruitAction(toRecruit);
         }
 
@@ -53,7 +63,13 @@ public class BlitzBot extends Bot {
 
         if (self.getPopulation() > 5) return new RecruitAction(self.getPopulation() - 1);
 
-        Player smallestArmyOwner = game.getPlayers().get(0);
+        Player smallestArmyOwner = self;
+        for (Player p : game.getPlayers()){
+            if (p.isAlive() && !p.getName().equals(self.getName())) {
+                smallestArmyOwner = p;
+                break;
+            }
+        }
         for (Player p : game.getPlayers()) {
             if (p.getName().equals(self.getName()) || !p.isAlive())
                 continue;

@@ -31,12 +31,9 @@ public class ProductionEvent extends AbstractEvent {
                 p.setResource(Game.Resources.POPULATION.ordinal(),
                         (int)(p.getResource(Game.Resources.POPULATION.ordinal()) * game.getConsts().populationGrowth));
 
-                if (p.getResource(Game.Resources.POPULATION.ordinal()) +
-                 p.getResource(Game.Resources.MILITARY.ordinal()) >
-                p.getResource(Game.Resources.LAND.ordinal()) * game.getConsts().landCapacity){
-                    p.setResource(Game.Resources.POPULATION.ordinal(),
-                            (int)(p.getResource(Game.Resources.LAND.ordinal()) * game.getConsts().landCapacity
-                     - p.getResource(Game.Resources.MILITARY.ordinal())));
+                if (p.getTotalPopulation() >
+                p.getLand() * game.getConsts().landCapacity){
+                    p.setResource(Game.Resources.POPULATION,(int)(p.getLand() * game.getConsts().landCapacity - p.getMilitary()));
                 }
                 
                 p.subtractResource(Game.Resources.FOOD.ordinal(),

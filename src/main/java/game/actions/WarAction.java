@@ -109,7 +109,7 @@ public class WarAction implements IRespondableAction<WarReaction> {
             tempSum += I;
         }
 
-        attackedPlayer.subtractResource(Game.Resources.MILITARY, tempSum);
+        reactor.subtractResource(Game.Resources.MILITARY, tempSum);
         actor.subtractResource(Game.Resources.MILITARY, sum);
         actor.subtractResource(Game.Resources.GOLD, (int)game.getConsts().goldForWar);
 
@@ -132,10 +132,10 @@ public class WarAction implements IRespondableAction<WarReaction> {
 
         if (game.getConsts().attackingWave2Multiplier*sumAttacking > sumDefending){
             winner = actor;
-            loser = attackedPlayer;
+            loser = reactor;
             remainingMilitary = (int)Math.min(game.getConsts().attackingWave2Multiplier*sumAttacking - sumDefending, sumAttacking);
         } else if (game.getConsts().attackingWave2Multiplier*sumAttacking < sumDefending) {
-            winner = attackedPlayer;
+            winner = reactor;
             loser = actor;
             remainingMilitary = (int)(sumDefending - game.getConsts().attackingWave2Multiplier*sumAttacking);
         } else {
@@ -146,16 +146,16 @@ public class WarAction implements IRespondableAction<WarReaction> {
         int subtracted;
         for (Game.Resources res : Game.Resources.values()){
             subtracted = (int)(remainingMilitary * game.getConsts().getStealingFactor(res));
-            if (loser.getResource(res) < subtracted)
+            if (loser.getResource(res) < subtracted) {
                 subtracted = loser.getResource(res);
-
+            }
             loser.subtractResource(res, subtracted);
             winner.addResource(res, subtracted);
         }
 
         winner.addResource(Game.Resources.MILITARY, remainingMilitary);
 
-        if (loser.getResource(Game.Resources.POPULATION) <= 0)
+        if (loser.getResource(Game.Resources.POPULATION) <= 0 || loser.getLand() <= 0)
             loser.setAlive(false);
 
         logger.info(String.format("%s won with %d remaining.",

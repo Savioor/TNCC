@@ -21,11 +21,10 @@ public class GUIGameRunner {
 
     public GUIGameRunner(){
         List<Player> playerList = new ArrayList<>();
-        playerList.add(createBotPlayer("p1", new NothingBot()));
-        playerList.add(createBotPlayer("p2", new TurtleBot()));
-        playerList.add(createBotPlayer("p3", new TurtleBot()));
-        playerList.add(createBotPlayer("p4", new TurtleBot()));
-        playerList.add(createBotPlayer("p5", new BlitzBot()));
+        playerList.add(createBotPlayer("Turtle1", new TurtleBot()));
+        playerList.add(createBotPlayer("Turtle2", new TurtleBot()));
+        playerList.add(createBotPlayer("Turtle3", new TurtleBot()));
+        playerList.add(createBotPlayer("Blitz", new BlitzBot()));
         Competition c = new Competition(playerList);
         gameFrame = new CompetitionWindow(c);
         gameFrame.setVisible(true);
