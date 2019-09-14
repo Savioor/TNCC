@@ -1,6 +1,7 @@
 package game;
 
 import game.actions.IRespondableAction;
+import game.actions.WaitAction;
 import game.actions.reactions.Reaction;
 import game.events.AbstractEvent;
 import game.events.ProductionEvent;
@@ -115,6 +116,10 @@ public class Game {
 
             }
             logger.warn(current.getName() + " executed Illegal action " + action.getName());
+            if (current.isBot){
+                action = new WaitAction();
+                break;
+            }
         }
 
         logger.debug(action.getName() + " was run by " + current.getName());

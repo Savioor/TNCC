@@ -25,7 +25,7 @@ public class GUIGameRunner {
         playerList.add(createBotPlayer("p2", new TurtleBot()));
         playerList.add(createBotPlayer("p3", new TurtleBot()));
         playerList.add(createBotPlayer("p4", new TurtleBot()));
-        playerList.add(createBotPlayer("p5", new WarBot()));
+        playerList.add(createBotPlayer("p5", new TurtleBot()));
         Competition c = new Competition(playerList);
         gameFrame = new CompetitionWindow(c);
         gameFrame.setVisible(true);
