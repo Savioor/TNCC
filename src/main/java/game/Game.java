@@ -2,15 +2,15 @@ package game;
 
 import game.actions.IRespondableAction;
 import game.actions.WaitAction;
+import game.actions.WarAction;
 import game.actions.reactions.Reaction;
 import game.events.AbstractEvent;
 import game.events.ProductionEvent;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 import util.Tuple2;
 import util.log.Logger;
@@ -26,12 +26,15 @@ public class Game {
     private Logger logger;
     private int turn;
     private final long BOT_TIMEOUT = 20;
+    private final long BOT_REPLY_TIMEOUT = 10;
+    private ExecutorService executor;
 
     public static final String ACTION_OK = "OK", ACTION_FAIL = "FAIL";
 
     public Game(List<Player> players, GameConstants conts) {
         this.players = players;
         this.events = new ArrayList<>();
+        this.executor = Executors.newSingleThreadExecutor();
         this.consts = conts;
         events.add(new ProductionEvent(this));
         for (Player p : players)
@@ -81,7 +84,13 @@ public class Game {
         if (turn == consts.maxTurns){
             return alive;
         }
+
         turn++;
+        logBoard();
+        return null;
+    }
+
+    private void logBoard(){
         logger.info("------------------");
         logger.info("Current Board: ");
         StringBuilder title = new StringBuilder("NAME\t");
@@ -101,27 +110,62 @@ public class Game {
             logger.info(resourseBuilder.toString());
         }
         logger.info("------------------");
-        return null;
     }
 
-    public void executeTurn(Player current){
+    public void executeTurn(Player current) {
 
         IRespondableAction action;
         Reaction reaction;
         Tuple2<Boolean, Tuple2<Player, List<String>>> response;
+        Game game = this;
+        Future<IRespondableAction> actionGetter = executor.submit(new Callable<>() {
+            @Override
+            public IRespondableAction call() {
+                return current.getAction(game);
+            }
+        });
 
         while(true){
 
-            action = current.getAction(this);
+            if (current.isBot) {
+                try {
+                    action = actionGetter.get(BOT_TIMEOUT, TimeUnit.MILLISECONDS);
+                } catch (Exception e) {
+                    action = new WaitAction();
+                    logger.warn(current.getName() + " took too much time/crashed");
+                    logger.warn(e.toString());
+                }
+            } else {
+                action = current.getAction(game);
+            }
             response = action.execute(this, current);
             if (response.first) {
 
                 if (response.second == null)
                     break;
                 Player responder = getPlayerByNameOrId(response.second.first.getName());
-                while (true) {
 
-                    reaction = responder.getReaction(response.second.second, this);
+                final var message = response.second.second;
+
+                Future<Reaction> reactionGetter = executor.submit(new Callable<Reaction>() {
+                    @Override
+                    public Reaction call() {
+                        return responder.getReaction(message, game);
+                    }
+                });
+
+                while (true) {
+                    if (responder.isBot){
+                        try {
+                            reaction = reactionGetter.get(BOT_REPLY_TIMEOUT, TimeUnit.MILLISECONDS);
+                        } catch (Exception e) {
+                            reaction = action.defaultBotResponse();
+                            logger.warn(current.getName() + " took too much time/crashed");
+                            logger.warn(e.toString());
+                        }
+                    } else {
+                        reaction = responder.getReaction(response.second.second, this);
+                    }
                     if (action.validateResponse(reaction)){
                         break;
                     }

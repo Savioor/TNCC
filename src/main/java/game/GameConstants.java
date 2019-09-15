@@ -20,8 +20,8 @@ public class GameConstants {
             populationGrowth,
             landCapacity,
             goldForWar,
-            defendingWave1Multiplier,
-            attackingWave2Multiplier;
+            defendingWave1Multiplier, // Has to be >=1
+            attackingWave2Multiplier; // Has to be >= 1
 
     public final int maxTurns;
 
@@ -94,10 +94,10 @@ public class GameConstants {
                 startingValues.put(Game.Resources.FOOD, 1500);
 
                 stealingFactor.put(Game.Resources.GOLD, 2.0);
-                stealingFactor.put(Game.Resources.LAND, .4);
+                stealingFactor.put(Game.Resources.LAND, .05);
                 stealingFactor.put(Game.Resources.POPULATION, 1.0);
                 stealingFactor.put(Game.Resources.MILITARY, 0.0);
-                stealingFactor.put(Game.Resources.FOOD, 4.0);
+                stealingFactor.put(Game.Resources.FOOD, 2.0);
 
                 populationFoodProduction = 0.5;
                 populationGoldProduction = 0.25;
@@ -165,11 +165,11 @@ public class GameConstants {
                 startingValues.put(Game.Resources.MILITARY, 0);
                 startingValues.put(Game.Resources.FOOD, 800);
 
-                stealingFactor.put(Game.Resources.GOLD, 1.0);
-                stealingFactor.put(Game.Resources.LAND, .2);
-                stealingFactor.put(Game.Resources.POPULATION, .5);
+                stealingFactor.put(Game.Resources.GOLD, 0.5);
+                stealingFactor.put(Game.Resources.LAND, .025);
+                stealingFactor.put(Game.Resources.POPULATION, .2);
                 stealingFactor.put(Game.Resources.MILITARY, 0.0);
-                stealingFactor.put(Game.Resources.FOOD, 2.0);
+                stealingFactor.put(Game.Resources.FOOD, 1.0);
 
                 populationFoodProduction = 0.5;
                 populationGoldProduction = 0.25;

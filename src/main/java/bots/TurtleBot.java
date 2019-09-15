@@ -19,7 +19,7 @@ public class TurtleBot extends Bot {
         int largestArmy = 0;
         for (Player p : game.getPlayers()) {
             if (p.getResource(Game.Resources.GOLD) + popGoldPord*p.getPopulation() - p.getMilitary()*armyGoldUse >= goldForArmy) {
-                if (p.getName().equals(self.getName()))
+                if (p.getName().equals(self.getName()) || !p.isAlive())
                     continue;
                 if (p.getResource(Game.Resources.MILITARY) > largestArmy)
                     largestArmy = p.getResource(Game.Resources.MILITARY);
