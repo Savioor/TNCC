@@ -144,8 +144,10 @@ public class Game {
             response = action.execute(this, current);
             if (response.first) {
 
-                if (response.second == null)
+                if (response.second == null) {
+                    updateHistory(action, this, current, null, null);
                     break;
+                }
                 Player responder = getPlayerByNameOrId(response.second.first.getName());
 
                 final var message = response.second.second;
@@ -179,6 +181,7 @@ public class Game {
                 }
 
                 if (action.executeWithResponse(this, current, responder, reaction)){
+                    updateHistory(action, game, current, responder, reaction);
                     break;
                 }
 
@@ -192,6 +195,14 @@ public class Game {
 
         logger.debug(action.getName() + " was run by " + current.getName());
 
+    }
+
+    private void updateHistory(IRespondableAction action, Game game, Player actor, Player reactor, Reaction reac){
+        historyBook.add(action.generateChronicle(game, actor, reactor, reac));
+    }
+
+    public List<HistoricalAction> getHistory(){
+        return historyBook;
     }
 
     public Player getPlayerByNameOrId(String input){
