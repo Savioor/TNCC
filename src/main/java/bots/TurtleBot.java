@@ -6,7 +6,7 @@ import game.Game;
 import game.Player;
 import game.actions.IRespondableAction;
 import game.actions.RecruitAction;
-import util.Tuple3;
+import util.Tuple3Int;
 
 public class TurtleBot extends Bot {
     @Override
@@ -40,9 +40,9 @@ public class TurtleBot extends Bot {
     }
 
     @Override
-    public Tuple3<Integer> fightWar(GameWrapper game, Player self, Player other, int attackingForces) {
+    public Tuple3Int fightWar(GameWrapper game, Player self, Player other, int attackingForces) {
         int thirdOfArmy = self.getResource(Game.Resources.MILITARY) / 3;
-        return new Tuple3<>(thirdOfArmy, thirdOfArmy, thirdOfArmy);
+        return new Tuple3Int(thirdOfArmy, thirdOfArmy, thirdOfArmy);
     }
 
     @Override

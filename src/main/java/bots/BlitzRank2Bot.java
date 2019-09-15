@@ -8,7 +8,7 @@ import game.actions.IRespondableAction;
 import game.actions.RecruitAction;
 import game.actions.WaitAction;
 import game.actions.WarAction;
-import util.Tuple3;
+import util.Tuple3Int;
 
 import java.util.Random;
 
@@ -57,7 +57,7 @@ public class BlitzRank2Bot extends Bot {
         if (self.getPopulation() > 5) return new RecruitAction(self.getPopulation() - 1);
         if (2*game.getPlayerByNameOrId(blitzer).getMilitary() > self.getMilitary()) return new WaitAction();
 
-        Tuple3<Integer> forces = new Tuple3<>(0,0,0);
+        Tuple3Int forces = new Tuple3Int(0,0,0);
         forces.set(random.nextInt(3), self.getMilitary());
 
         waited = false;
@@ -73,7 +73,7 @@ public class BlitzRank2Bot extends Bot {
     }
 
     @Override
-    public Tuple3<Integer> fightWar(GameWrapper game, Player self, Player other, int attackingForces) {
+    public Tuple3Int fightWar(GameWrapper game, Player self, Player other, int attackingForces) {
         return babyBlitzBot.fightWar(game, self, other, attackingForces);
     }
 

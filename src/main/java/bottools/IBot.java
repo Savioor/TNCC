@@ -4,7 +4,7 @@ import game.Game;
 import game.Player;
 
 import game.actions.IRespondableAction;
-import util.Tuple3;
+import util.Tuple3Int;
 
 public interface IBot {
 
@@ -32,7 +32,7 @@ public interface IBot {
      * @param attackingForces The total amount of army fighting you
      * @return Three tuple of left flank, front and right flank
      */
-    Tuple3<Integer> fightWar(GameWrapper game, Player self, Player other, int attackingForces);
+    Tuple3Int fightWar(GameWrapper game, Player self, Player other, int attackingForces);
     void reset(GameWrapper game, Player self);
 
 }

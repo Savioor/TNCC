@@ -9,7 +9,7 @@ import game.actions.RecruitAction;
 import game.actions.WaitAction;
 import game.actions.WarAction;
 import game.actions.reactions.Reaction;
-import util.Tuple3;
+import util.Tuple3Int;
 
 import java.util.List;
 import java.util.Random;
@@ -38,7 +38,7 @@ public class WarBot extends Bot {
                 }
             }
             int thirdOfArmy = self.getResource(Game.Resources.MILITARY) / 3;
-            return new WarAction(attacked, new Tuple3<>(thirdOfArmy, thirdOfArmy, thirdOfArmy));
+            return new WarAction(attacked, new Tuple3Int(thirdOfArmy, thirdOfArmy, thirdOfArmy));
         }
         else if (self.getMilitary() <= 0){
             return new RecruitAction(self.getPopulation() / 10);
@@ -54,8 +54,8 @@ public class WarBot extends Bot {
     }
 
     @Override
-    public Tuple3<Integer> fightWar(GameWrapper game, Player self, Player other, int attackingForces) {
+    public Tuple3Int fightWar(GameWrapper game, Player self, Player other, int attackingForces) {
         int thirdOfArmy = self.getResource(Game.Resources.MILITARY) / 3;
-        return new Tuple3<>(thirdOfArmy, thirdOfArmy, thirdOfArmy);
+        return new Tuple3Int(thirdOfArmy, thirdOfArmy, thirdOfArmy);
     }
 }

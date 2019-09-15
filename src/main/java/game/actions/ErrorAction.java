@@ -3,6 +3,7 @@ package game.actions;
 import game.Game;
 import game.Player;
 import game.actions.reactions.Reaction;
+import game.history.HistoricalAction;
 import util.Tuple2;
 
 import java.util.List;
@@ -52,6 +53,11 @@ public class ErrorAction implements IRespondableAction<Reaction> {
 
     @Override
     public Reaction defaultBotResponse() {
+        return null;
+    }
+
+    @Override
+    public HistoricalAction generateChronicle(Game game, Player actor, Player reactor, Reaction reaction) {
         return null;
     }
 }

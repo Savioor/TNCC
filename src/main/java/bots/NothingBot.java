@@ -6,7 +6,7 @@ import game.Game;
 import game.Player;
 import game.actions.IRespondableAction;
 import game.actions.WaitAction;
-import util.Tuple3;
+import util.Tuple3Int;
 
 public class NothingBot extends Bot {
 
@@ -21,8 +21,8 @@ public class NothingBot extends Bot {
     }
 
     @Override
-    public Tuple3<Integer> fightWar(GameWrapper game, Player self, Player other, int attackingForces) {
-        return new Tuple3<>(0,0,0);
+    public Tuple3Int fightWar(GameWrapper game, Player self, Player other, int attackingForces) {
+        return new Tuple3Int(0,0,0);
     }
 
     @Override

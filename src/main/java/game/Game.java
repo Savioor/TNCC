@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
+import game.history.HistoricalAction;
 import util.Tuple2;
 import util.log.Logger;
 import util.log.NamedLogger;
@@ -27,6 +28,7 @@ public class Game {
     private int turn;
     private final long BOT_TIMEOUT = 20;
     private final long BOT_REPLY_TIMEOUT = 10;
+    private ArrayList<HistoricalAction> historyBook;
     private ExecutorService executor;
 
     public static final String ACTION_OK = "OK", ACTION_FAIL = "FAIL";
@@ -36,6 +38,7 @@ public class Game {
         this.events = new ArrayList<>();
         this.executor = Executors.newSingleThreadExecutor();
         this.consts = conts;
+        this.historyBook = new ArrayList<>();
         events.add(new ProductionEvent(this));
         for (Player p : players)
             p.initialize(this);

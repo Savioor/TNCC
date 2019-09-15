@@ -4,6 +4,8 @@ import game.Game;
 import game.Player;
 import game.actions.reactions.Reaction;
 import game.actions.reactions.TradeReaction;
+import game.history.HistoricalAction;
+import game.history.footnotes.Trade;
 import util.Tuple2;
 import util.log.Logger;
 import util.log.NamedLogger;
@@ -149,5 +151,10 @@ public class TradeAction implements IRespondableAction<TradeReaction> {
     @Override
     public TradeReaction defaultBotResponse() {
         return new TradeReaction(true, Reaction.Status.OK);
+    }
+
+    @Override
+    public HistoricalAction generateChronicle(Game game, Player actor, Player reactor, TradeReaction reaction) {
+        return new Trade(actor, reactor, givingAmount, giving.ordinal(), takingAmount, taking.ordinal(), reaction.getReaction());
     }
 }

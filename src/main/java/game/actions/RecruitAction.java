@@ -3,6 +3,8 @@ package game.actions;
 import game.Game;
 import game.Player;
 import game.actions.reactions.Reaction;
+import game.history.HistoricalAction;
+import game.history.footnotes.Recruit;
 import jdk.jshell.spi.ExecutionControl;
 import util.Tuple2;
 import util.log.Logger;
@@ -70,5 +72,10 @@ public class RecruitAction implements IRespondableAction<Reaction> {
     @Override
     public Reaction defaultBotResponse() {
         return null;
+    }
+
+    @Override
+    public HistoricalAction generateChronicle(Game game, Player actor, Player reactor, Reaction reaction) {
+        return new Recruit(actor, toRecruit);
     }
 }

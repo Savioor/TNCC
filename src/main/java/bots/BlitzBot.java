@@ -7,7 +7,7 @@ import game.Player;
 import game.actions.IRespondableAction;
 import game.actions.RecruitAction;
 import game.actions.WarAction;
-import util.Tuple3;
+import util.Tuple3Int;
 
 import java.util.Random;
 
@@ -78,7 +78,7 @@ public class BlitzBot extends Bot {
             if (p.getResource(Game.Resources.MILITARY) < smallestArmyOwner.getMilitary())
                 smallestArmyOwner = p;
         }
-        Tuple3<Integer> forces = new Tuple3<>(0,0,0);
+        Tuple3Int forces = new Tuple3Int(0,0,0);
         forces.set(random.nextInt(3), self.getMilitary());
 
         determined = false;
@@ -92,13 +92,13 @@ public class BlitzBot extends Bot {
     }
 
     @Override
-    public Tuple3<Integer> fightWar(GameWrapper game, Player self, Player other, int attackingForces) {
+    public Tuple3Int fightWar(GameWrapper game, Player self, Player other, int attackingForces) {
         int thirdOfArmy = self.getResource(Game.Resources.MILITARY) / 3;
         int halfOfArmy = self.getMilitary() / 3;
         if (attackingForces <= game.getConsts().defendingWave1Multiplier*thirdOfArmy) {
-            return new Tuple3<>(thirdOfArmy, thirdOfArmy, thirdOfArmy);
+            return new Tuple3Int(thirdOfArmy, thirdOfArmy, thirdOfArmy);
         } else {
-            Tuple3<Integer> defence = new Tuple3<>(halfOfArmy, halfOfArmy, halfOfArmy);
+            Tuple3Int defence = new Tuple3Int(halfOfArmy, halfOfArmy, halfOfArmy);
             defence.set(random.nextInt(3), 0);
             return defence;
         }

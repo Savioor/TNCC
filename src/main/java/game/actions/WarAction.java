@@ -4,8 +4,10 @@ import game.Game;
 import game.Player;
 import game.actions.reactions.Reaction;
 import game.actions.reactions.WarReaction;
+import game.history.HistoricalAction;
+import game.history.footnotes.War;
 import util.Tuple2;
-import util.Tuple3;
+import util.Tuple3Int;
 import util.log.Logger;
 import util.log.NamedLogger;
 
@@ -16,10 +18,10 @@ import java.util.List;
 public class WarAction implements IRespondableAction<WarReaction> {
 
     private Player attackedPlayer;
-    private Tuple3<Integer> attackingForcesDivision;
+    private Tuple3Int attackingForcesDivision;
     private Logger logger;
 
-    public WarAction(Player attacked, Tuple3<Integer> attackingForcesDivision) {
+    public WarAction(Player attacked, Tuple3Int attackingForcesDivision) {
         this.attackedPlayer = attacked;
         this.attackingForcesDivision = attackingForcesDivision;
         this.logger = new NamedLogger("WAR");
@@ -43,9 +45,9 @@ public class WarAction implements IRespondableAction<WarReaction> {
         Player attacked = game.getPlayerByNameOrId(data.get(0));
         if (attacked == null)
             return new ErrorAction("Player " + data.get(0) + " could not be found");
-        Tuple3<Integer> attackingForces;
+        Tuple3Int attackingForces;
         try{
-            attackingForces = new Tuple3<>(Integer.parseInt(data.get(1)), Integer.parseInt(data.get(2)), Integer.parseInt(data.get(3)));
+            attackingForces = new Tuple3Int(Integer.parseInt(data.get(1)), Integer.parseInt(data.get(2)), Integer.parseInt(data.get(3)));
         } catch (NumberFormatException e){
             return new ErrorAction("Arguments 1-3 was expected to be integers, got " + Arrays.toString(data.subList(1, 3).toArray()));
         }
@@ -98,16 +100,9 @@ public class WarAction implements IRespondableAction<WarReaction> {
                 attackingForcesDivision.third, attackedPlayer.getName(), reaction.getReaction().first,
                 reaction.getReaction().second, reaction.getReaction().third));
 
-        int sum = 0;
-        for (Integer I : attackingForcesDivision){
-            sum += I;
-        }
+        int sum = attackingForcesDivision.sum();
 
-
-        int tempSum = 0;
-        for (Integer I : reaction.getReaction()){
-            tempSum += I;
-        }
+        int tempSum = reaction.getReaction().sum();
 
         reactor.subtractResource(Game.Resources.MILITARY, tempSum);
         actor.subtractResource(Game.Resources.MILITARY, sum);
@@ -166,6 +161,11 @@ public class WarAction implements IRespondableAction<WarReaction> {
 
     @Override
     public WarReaction defaultBotResponse() {
-        return new WarReaction(new Tuple3<>(0,0,0), Reaction.Status.OK);
+        return new WarReaction(new Tuple3Int(0,0,0), Reaction.Status.OK);
+    }
+
+    @Override
+    public HistoricalAction generateChronicle(Game game, Player actor, Player reactor, WarReaction reaction) {
+        return new War(actor, reactor, attackingForcesDivision.sum(), reaction.getReaction().sum());
     }
 }
