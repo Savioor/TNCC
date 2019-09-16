@@ -9,6 +9,8 @@ import game.actions.action_getters.ConsoleReactor;
 import game.actions.reactions.Reaction;
 import game.actions.reactions.TradeReaction;
 import game.actions.reactions.WarReaction;
+import game.history.HistoricalAction;
+import game.history.footnotes.Trade;
 
 import java.util.ArrayList;
 import java.util.List;

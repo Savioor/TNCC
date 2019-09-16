@@ -23,7 +23,7 @@ public class GameConstants {
             defendingWave1Multiplier, // Has to be >=1
             attackingWave2Multiplier; // Has to be >= 1
 
-    public final int maxTurns;
+    public final int maxTurns, hungerDeathRate;
 
     private HashMap<Game.Resources, Integer> startingValues = new HashMap<>();
     private HashMap<Game.Resources, Double> stealingFactor = new HashMap<>();
@@ -60,6 +60,7 @@ public class GameConstants {
                 goldForWar = 1600;
                 defendingWave1Multiplier = 2;
                 attackingWave2Multiplier = 2;
+                hungerDeathRate = 200;
                 maxTurns = 100;
                 break;
             case CRAZY:
@@ -84,6 +85,8 @@ public class GameConstants {
                 goldForWar = 10000;
                 defendingWave1Multiplier = 2;
                 attackingWave2Multiplier = 2;
+                hungerDeathRate = 200;
+
                 maxTurns = 100;
                 break;
             case MEXICAN_STANDOFF:
@@ -108,7 +111,9 @@ public class GameConstants {
                 goldForWar = 1600;
                 defendingWave1Multiplier = 2;
                 attackingWave2Multiplier = 2;
-                maxTurns = 20;
+                hungerDeathRate = 200;
+
+                maxTurns = 100;
                 break;
             case ROBOT_ARMY:
                 startingValues.put(Game.Resources.GOLD, 600);
@@ -132,6 +137,8 @@ public class GameConstants {
                 goldForWar = 2000;
                 defendingWave1Multiplier = 1;
                 attackingWave2Multiplier = 1;
+                hungerDeathRate = 200;
+
                 maxTurns = 100;
                 break;
             case TRIBE:
@@ -156,6 +163,8 @@ public class GameConstants {
                 goldForWar = 1000;
                 defendingWave1Multiplier = 2;
                 attackingWave2Multiplier = 2;
+                hungerDeathRate = 200;
+
                 maxTurns = 200;
                 break;
             default:
@@ -180,6 +189,8 @@ public class GameConstants {
                 goldForWar = 1600;
                 defendingWave1Multiplier = 2;
                 attackingWave2Multiplier = 2;
+                hungerDeathRate = 200;
+
                 maxTurns = 100;
                 break;
         }

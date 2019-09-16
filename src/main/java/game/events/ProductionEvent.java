@@ -48,7 +48,7 @@ public class ProductionEvent extends AbstractEvent {
 
                 if (p.getResource(Game.Resources.FOOD.ordinal()) <= 0){
                     p.setResource(Game.Resources.FOOD.ordinal(), 0);
-                    p.subtractResource(Game.Resources.POPULATION.ordinal(), 200);
+                    p.subtractResource(Game.Resources.POPULATION.ordinal(), game.getConsts().hungerDeathRate);
                 }
 
                 if (p.getResource(Game.Resources.POPULATION.ordinal()) <= 0){

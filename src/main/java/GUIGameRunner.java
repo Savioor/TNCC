@@ -33,7 +33,7 @@ public class GUIGameRunner {
 
 
         Competition c = new Competition(playerList);
-        gameFrame = new CompetitionWindow(c, new GameConstants(GameConstants.ConstantsGroup.CRAZY));
+        gameFrame = new CompetitionWindow(c, new GameConstants(GameConstants.ConstantsGroup.MEXICAN_STANDOFF));
         gameFrame.setVisible(true);
         gameFrame.pack();
     }
