@@ -52,6 +52,7 @@ public class BlitzBot extends Bot {
                     continue;
                 if (p.getResource(Game.Resources.MILITARY) < smallestArmyOwner.getMilitary())
                     smallestArmyOwner = p;
+
             }
 
             int minimumPop = (int) ((self.getTotalPopulation()*foodPerArmy) / (foodProd + foodPerArmy)) + 1;
@@ -94,7 +95,7 @@ public class BlitzBot extends Bot {
     @Override
     public Tuple3Int fightWar(GameWrapper game, Player self, Player other, int attackingForces) {
         int thirdOfArmy = self.getResource(Game.Resources.MILITARY) / 3;
-        int halfOfArmy = self.getMilitary() / 3;
+        int halfOfArmy = self.getMilitary() / 2;
         if (attackingForces <= game.getConsts().defendingWave1Multiplier*thirdOfArmy) {
             return new Tuple3Int(thirdOfArmy, thirdOfArmy, thirdOfArmy);
         } else {

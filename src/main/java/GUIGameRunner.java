@@ -24,16 +24,19 @@ public class GUIGameRunner {
         List<Player> playerList = new ArrayList<>();
         playerList.add(createBotPlayer("War1", new WarBot()));
         playerList.add(createBotPlayer("War2", new WarBot()));
+//        playerList.add(createBotPlayer("War3", new WarBot()));
+//        playerList.add(createBotPlayer("War4", new WarBot()));
+
 
         playerList.add(createBotPlayer("Turtle1", new TurtleBot()));
         playerList.add(createBotPlayer("Turtle2", new TurtleBot()));
 
         playerList.add(createBotPlayer("Blitz1", new BlitzBot()));
-        playerList.add(createBotPlayer("Blitz2", new BlitzBot()));
+//        playerList.add(createBotPlayer("Blitz2", new BlitzBot()));
 
 
         Competition c = new Competition(playerList);
-        gameFrame = new CompetitionWindow(c, new GameConstants(GameConstants.ConstantsGroup.MEXICAN_STANDOFF));
+        gameFrame = new CompetitionWindow(c, new GameConstants(GameConstants.ConstantsGroup.DEFAULT));
         gameFrame.setVisible(true);
         gameFrame.pack();
     }

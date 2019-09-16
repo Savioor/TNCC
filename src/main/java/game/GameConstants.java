@@ -170,13 +170,13 @@ public class GameConstants {
             default:
                 startingValues.put(Game.Resources.GOLD, 600);
                 startingValues.put(Game.Resources.LAND, 150);
-                startingValues.put(Game.Resources.POPULATION, 1000);
+                startingValues.put(Game.Resources.POPULATION, 800);
                 startingValues.put(Game.Resources.MILITARY, 0);
                 startingValues.put(Game.Resources.FOOD, 800);
 
                 stealingFactor.put(Game.Resources.GOLD, 0.5);
                 stealingFactor.put(Game.Resources.LAND, .025);
-                stealingFactor.put(Game.Resources.POPULATION, .2);
+                stealingFactor.put(Game.Resources.POPULATION, .1);
                 stealingFactor.put(Game.Resources.MILITARY, 0.0);
                 stealingFactor.put(Game.Resources.FOOD, 1.0);
 
@@ -184,7 +184,7 @@ public class GameConstants {
                 populationGoldProduction = 0.25;
                 armyFoodConsumption = 1;
                 armyGoldConsumption = 0.1;
-                populationGrowth = 1.08;
+                populationGrowth = 1.07;
                 landCapacity = 10;
                 goldForWar = 1600;
                 defendingWave1Multiplier = 2;

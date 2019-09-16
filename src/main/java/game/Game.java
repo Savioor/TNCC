@@ -26,8 +26,8 @@ public class Game {
     private GameConstants consts;
     private Logger logger;
     private int turn;
-    private final long BOT_TIMEOUT = 20;
-    private final long BOT_REPLY_TIMEOUT = 10;
+    private final long BOT_TIMEOUT = 50;
+    private final long BOT_REPLY_TIMEOUT = 25;
     private ArrayList<HistoricalAction> historyBook;
     private ExecutorService executor;
 
