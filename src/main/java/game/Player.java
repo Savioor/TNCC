@@ -1,8 +1,8 @@
 package game;
 
+import game.actions.IRespondableAction;
 import bottools.GameWrapper;
 import game.actions.action_getters.IActionGetter;
-import game.actions.IAction;
 import game.actions.action_getters.IReActionGetter;
 import game.actions.reactions.Reaction;
 
@@ -91,7 +91,7 @@ public class Player {
         isAlive = alive;
     }
 
-    public IAction getAction(Game game) {
+    public IRespondableAction getAction(Game game) {
         return actor.getAction(game, this);
     }
 
@@ -100,7 +100,7 @@ public class Player {
     }
 
     public boolean canGoToWar(GameWrapper game){
-        return this.getResource(Game.Resources.GOLD) < game.getConsts().goldForWar && this.isAlive();
+        return this.getResource(Game.Resources.GOLD) >= game.getConsts().goldForWar && this.isAlive();
     }
 
     public int getGold(){
@@ -123,7 +123,20 @@ public class Player {
         return getResource(Game.Resources.FOOD);
     }
 
+    public int getTotalPopulation(){
+        return getPopulation() + getMilitary();
+    }
+
     public String toString(){
         return getName();
     }
+
+    public boolean canAttack(GameWrapper game, Player other){
+        return (!other.getName().equals(this.getName())) && other.isAlive() && this.canGoToWar(game);
+    }
+
+    public boolean canTradeWith(GameWrapper game, Player other){
+        return (!other.getName().equals(this.getName())) && other.isAlive();
+    }
+
 }

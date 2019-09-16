@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class Tuple3<T> implements Iterable<T> {
-    public T first;
-    public T second;
-    public T third;
+public class Tuple3Int implements Iterable<Integer> {
+    public int first;
+    public int second;
+    public int third;
 
-    private List<T> asList;
+    private List<Integer> asList;
 
-    public Tuple3(T first, T second, T third){
+    public Tuple3Int(int first, int second, int third){
         this.first = first;
         this.second = second;
         this.third = third;
@@ -21,7 +21,7 @@ public class Tuple3<T> implements Iterable<T> {
         asList.add(third);
     }
 
-    public T get(int i){
+    public int get(int i){
         switch (i){
             case 0:
                 return first;
@@ -34,7 +34,7 @@ public class Tuple3<T> implements Iterable<T> {
         }
     }
 
-    public void set(int i, T value){
+    public void set(int i, int value){
         switch (i){
             case 0:
                 first = value;
@@ -51,10 +51,18 @@ public class Tuple3<T> implements Iterable<T> {
     }
 
     @Override
-    public Iterator<T> iterator() {
+    public Iterator<Integer> iterator() {
         asList.set(0,first);
         asList.set(1,second);
         asList.set(2,third);
         return asList.iterator();
+    }
+
+    public int sum(){
+        return first + second + third;
+    }
+
+    public int size(){
+        return 3;
     }
 }

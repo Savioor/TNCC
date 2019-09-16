@@ -3,15 +3,22 @@ package game.actions;
 import game.Game;
 import game.Player;
 import game.actions.reactions.Reaction;
+import game.actions.reactions.TradeReaction;
+import game.history.HistoricalAction;
+import game.history.footnotes.Trade;
+import util.Tuple2;
+import util.log.Logger;
+import util.log.NamedLogger;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TradeAction implements IAction {
+public class TradeAction implements IRespondableAction<TradeReaction> {
 
     private Game.Resources giving, taking;
     private int givingAmount, takingAmount;
     private Player secondActor;
+    private Logger logger;
 
 
     @Override
@@ -25,7 +32,7 @@ public class TradeAction implements IAction {
     }
 
     @Override
-    public IAction parse(Game game, List<String> data) {
+    public IRespondableAction parse(Game game, List<String> data) {
         if (data.size() != 5)
             return new ErrorAction("Expected 5 arguments, received " + data.size());
         String tradeWith = data.get(0);
@@ -83,21 +90,22 @@ public class TradeAction implements IAction {
     }
 
     @Override
-    public boolean execute(Game game, Player actor) {
-        if (actor.equals(secondActor))
-            return false;
-        if (!secondActor.isAlive())
-            return false;
-        if (givingAmount < 0 || takingAmount < 0)
-            return false;
-        if (!(giving.equals(Game.Resources.GOLD) || taking.equals(Game.Resources.GOLD)))
-            return false;
-        if (actor.getResource(giving) - givingAmount < 0)
-            return false;
-        if (secondActor.getResource(taking) - takingAmount < 0)
-            return false;
-
+    public Tuple2<Boolean, Tuple2<Player, List<String>>> execute(Game game, Player actor) {
         List<String> message = new ArrayList<>();
+
+        if (actor.equals(secondActor))
+            return new Tuple2<>(false, null);
+        if (!secondActor.isAlive())
+            return new Tuple2<>(false, null);;
+        if (givingAmount < 0 || takingAmount < 0)
+            return new Tuple2<>(false, null);;
+        if (!(giving.equals(Game.Resources.GOLD) || taking.equals(Game.Resources.GOLD)))
+            return new Tuple2<>(false, null);;
+        if (actor.getResource(giving) - givingAmount < 0)
+            return new Tuple2<>(false, null);;
+        if (secondActor.getResource(taking) - takingAmount < 0)
+            return new Tuple2<>(false, null);;
+
         message.add("trade");
         message.add(actor.getName());
         message.add(taking.name());
@@ -105,21 +113,7 @@ public class TradeAction implements IAction {
         message.add(Integer.toString(takingAmount));
         message.add(Integer.toString(givingAmount));
 
-        Reaction<Boolean> reaction;
-        while (true){
-            reaction = secondActor.getReaction(message, game);
-            if (reaction.getStatus().equals(Reaction.Status.OK))
-                break;
-        }
-
-        if (!reaction.getReaction())
-            return true;
-
-        actor.subtractResource(giving, givingAmount);
-        secondActor.addResource(giving, givingAmount);
-        actor.addResource(taking, takingAmount);
-        secondActor.subtractResource(taking, takingAmount);
-        return true;
+        return new Tuple2<>(true, new Tuple2<>(secondActor, message));
     }
 
     public TradeAction(Game.Resources giving, Game.Resources taking, int givingAmount, int takingAmount, Player secondActor) {
@@ -128,5 +122,39 @@ public class TradeAction implements IAction {
         this.givingAmount = givingAmount;
         this.takingAmount = takingAmount;
         this.secondActor = secondActor;
+        this.logger = new NamedLogger("TRADE");
+    }
+
+    @Override
+    public boolean validateResponse(TradeReaction reaction) {
+        return reaction.getStatus().equals(Reaction.Status.OK) && reaction.getReaction() != null;
+    }
+
+    @Override
+    public boolean executeWithResponse(Game game, Player actor, Player reactor, TradeReaction reaction) {
+        if (!reaction.getReaction()) {
+            logger.info(String.format("%s refused trade of %d %s for %d %s from %s",
+                    reactor.getName(), givingAmount, giving.name(), takingAmount, taking.name(), actor.getName()));
+            return true;
+        }
+
+        actor.subtractResource(giving, givingAmount);
+        reactor.addResource(giving, givingAmount);
+        actor.addResource(taking, takingAmount);
+        reactor.subtractResource(taking, takingAmount);
+
+        logger.info(String.format("%s accepted trade of %d %s for %d %s from %s",
+                reactor.getName(), givingAmount, giving.name(), takingAmount, taking.name(), actor.getName()));
+        return true;
+    }
+
+    @Override
+    public TradeReaction defaultBotResponse() {
+        return new TradeReaction(true, Reaction.Status.OK);
+    }
+
+    @Override
+    public HistoricalAction generateChronicle(Game game, Player actor, Player reactor, TradeReaction reaction) {
+        return new Trade(actor, reactor, givingAmount, giving.ordinal(), takingAmount, taking.ordinal(), reaction.getReaction());
     }
 }

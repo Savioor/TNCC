@@ -3,6 +3,7 @@ package bottools;
 import game.Game;
 import game.GameConstants;
 import game.Player;
+import game.history.HistoricalAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,18 @@ public class GameWrapper {
             playersCopy.add(p.getDummy());
         }
         return playersCopy;
+    }
+
+    public HistoricalAction getChronicle(int number){
+        return game.getHistory().get(number);
+    }
+
+    public HistoricalAction getChronicle(int cycle, int player){
+        return getChronicle(cycle*game.getPlayers().size() + player);
+    }
+
+    public int getChronicleAmount(){
+        return game.getHistory().size();
     }
 
     public GameConstants getConsts() {

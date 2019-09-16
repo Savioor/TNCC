@@ -1,6 +1,7 @@
 import bots.*;
 import bottools.Bot;
 import game.Competition;
+import game.GameConstants;
 import game.Player;
 import gui.CompetitionWindow;
 
@@ -21,13 +22,21 @@ public class GUIGameRunner {
 
     public GUIGameRunner(){
         List<Player> playerList = new ArrayList<>();
-        playerList.add(createBotPlayer("p1", new NothingBot()));
-        playerList.add(createBotPlayer("p2", new TurtleBot()));
-        playerList.add(createBotPlayer("p3", new TurtleBot()));
-        playerList.add(createBotPlayer("p4", new TurtleBot()));
-        playerList.add(createBotPlayer("p5", new WarBot()));
+        playerList.add(createBotPlayer("War1", new WarBot()));
+        playerList.add(createBotPlayer("War2", new WarBot()));
+//        playerList.add(createBotPlayer("War3", new WarBot()));
+//        playerList.add(createBotPlayer("War4", new WarBot()));
+
+
+        playerList.add(createBotPlayer("Turtle1", new TurtleBot()));
+        playerList.add(createBotPlayer("Turtle2", new TurtleBot()));
+
+        playerList.add(createBotPlayer("Blitz1", new BlitzBot()));
+//        playerList.add(createBotPlayer("Blitz2", new BlitzBot()));
+
+
         Competition c = new Competition(playerList);
-        gameFrame = new CompetitionWindow(c);
+        gameFrame = new CompetitionWindow(c, new GameConstants(GameConstants.ConstantsGroup.DEFAULT));
         gameFrame.setVisible(true);
         gameFrame.pack();
     }

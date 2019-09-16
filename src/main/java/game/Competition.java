@@ -1,5 +1,6 @@
 package game;
 
+import bottools.Bot;
 import util.log.Logger;
 import util.log.NamedLogger;
 
@@ -25,6 +26,12 @@ public class Competition {
         List<Player> players = clonePlayers(order);
         logger.info("Running new game with: " + Arrays.toString(players.toArray()));
         current = new Game(players, consts);
+        for (Player p : players){
+            if (p.isBot){
+                ((Bot) p.reactor).updateBot(current, p);
+                ((Bot) p.actor).updateBot(current, p);
+            }
+        }
         List<Player> winners;
         while(true){
             winners = current.executeCycle();
@@ -34,6 +41,7 @@ public class Competition {
         }
         List<Integer> winnerIds = new ArrayList<>();
         for (Player p : winners){
+            logger.info(String.format("%s survived this game!", p.getName()));
             winnerIds.add(getPlayerId(p));
         }
         return winnerIds;

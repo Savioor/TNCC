@@ -9,6 +9,8 @@ import game.actions.action_getters.ConsoleReactor;
 import game.actions.reactions.Reaction;
 import game.actions.reactions.TradeReaction;
 import game.actions.reactions.WarReaction;
+import game.history.HistoricalAction;
+import game.history.footnotes.Trade;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +24,7 @@ public class ConsoleGameRunner {
 
         List<Player> players = new ArrayList<>();
 
-        List<IAction> actions = new ArrayList<>();
+        List<IRespondableAction> actions = new ArrayList<>();
         actions.add(new WaitAction());
         actions.add(new RecruitAction(0));
         actions.add(new TradeAction(null, null, 0, 0, null));
@@ -36,7 +38,7 @@ public class ConsoleGameRunner {
         ConsoleReactor reactor = new ConsoleReactor(reactions);
         String name;
 
-        players.add(new Player("turtle", new TurtleBot(), new TurtleBot()));
+        players.add(new Player("turtle", new TurtleBot(), new TurtleBot(), true));
 
         while(true){
 
@@ -48,7 +50,7 @@ public class ConsoleGameRunner {
 
         }
 
-        Game game = new Game(players, new GameConstants());
+        Game game = new Game(players, new GameConstants(GameConstants.ConstantsGroup.DEFAULT));
 
         while (true){
             game.executeCycle();
