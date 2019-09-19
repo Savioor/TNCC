@@ -1,9 +1,9 @@
-import bots.*;
-import bottools.Bot;
-import game.Competition;
-import game.GameConstants;
-import game.Player;
-import gui.CompetitionWindow;
+import botdata.bots.*;
+import botdata.bottools.Bot;
+import gameengine.Competition;
+import gameengine.GameConstants;
+import gameengine.Player;
+import botdata.botsgui.CompetitionWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,16 +24,12 @@ public class GUIGameRunner {
         List<Player> playerList = new ArrayList<>();
         playerList.add(createBotPlayer("War1", new WarBot()));
         playerList.add(createBotPlayer("War2", new WarBot()));
-//        playerList.add(createBotPlayer("War3", new WarBot()));
-//        playerList.add(createBotPlayer("War4", new WarBot()));
-
 
         playerList.add(createBotPlayer("Turtle1", new TurtleBot()));
         playerList.add(createBotPlayer("Turtle2", new TurtleBot()));
 
         playerList.add(createBotPlayer("Blitz1", new BlitzBot()));
-//        playerList.add(createBotPlayer("Blitz2", new BlitzBot()));
-
+        playerList.add(createBotPlayer("Blitz2", new BlitzBot()));
 
         Competition c = new Competition(playerList);
         gameFrame = new CompetitionWindow(c, new GameConstants(GameConstants.ConstantsGroup.DEFAULT));

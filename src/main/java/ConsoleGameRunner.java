@@ -1,16 +1,13 @@
-import bots.NothingBot;
-import bots.TurtleBot;
-import game.Game;
-import game.GameConstants;
-import game.Player;
-import game.actions.*;
-import game.actions.action_getters.ConsoleGetter;
-import game.actions.action_getters.ConsoleReactor;
-import game.actions.reactions.Reaction;
-import game.actions.reactions.TradeReaction;
-import game.actions.reactions.WarReaction;
-import game.history.HistoricalAction;
-import game.history.footnotes.Trade;
+import botdata.bots.TurtleBot;
+import gameengine.Game;
+import gameengine.GameConstants;
+import gameengine.Player;
+import gameengine.actions.*;
+import gameengine.actions.action_getters.ConsoleGetter;
+import gameengine.actions.action_getters.ConsoleReactor;
+import gameengine.actions.reactions.Reaction;
+import gameengine.actions.reactions.TradeReaction;
+import gameengine.actions.reactions.WarReaction;
 
 import java.util.ArrayList;
 import java.util.List;

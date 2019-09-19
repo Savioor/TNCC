@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * A list of three integers
+ */
 public class Tuple3Int implements Iterable<Integer> {
     public int first;
     public int second;
@@ -11,6 +14,12 @@ public class Tuple3Int implements Iterable<Integer> {
 
     private List<Integer> asList;
 
+    /**
+     *
+     * @param first
+     * @param second
+     * @param third
+     */
     public Tuple3Int(int first, int second, int third){
         this.first = first;
         this.second = second;
@@ -21,6 +30,11 @@ public class Tuple3Int implements Iterable<Integer> {
         asList.add(third);
     }
 
+    /**
+     * Treat this class as a array of length three and get a given value
+     * @param i the index
+     * @return the integer of the index
+     */
     public int get(int i){
         switch (i){
             case 0:
@@ -34,6 +48,11 @@ public class Tuple3Int implements Iterable<Integer> {
         }
     }
 
+    /**
+     *
+     * @param i the index to change
+     * @param value the new value
+     */
     public void set(int i, int value){
         switch (i){
             case 0:
@@ -58,10 +77,18 @@ public class Tuple3Int implements Iterable<Integer> {
         return asList.iterator();
     }
 
+    /**
+     *
+     * @return The sum of the three integers.
+     */
     public int sum(){
         return first + second + third;
     }
 
+    /**
+     *
+     * @return 3
+     */
     public int size(){
         return 3;
     }
