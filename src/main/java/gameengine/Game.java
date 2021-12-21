@@ -61,6 +61,10 @@ public class Game {
         LAND
     }
 
+    public void addEvent(AbstractEvent event) {
+        events.add(event);
+    }
+
     public List<Player> executeCycle(){
         for (Player p : players) {
             if (p.isAlive())
@@ -147,7 +151,7 @@ public class Game {
                 }
                 Player responder = getPlayerByNameOrId(response.second.first.getName());
 
-                final var message = response.second.second;
+                final List<String> message = response.second.second;
 
                 Future<Reaction> reactionGetter = executor.submit(new Callable<Reaction>() {
                     @Override

@@ -176,19 +176,19 @@ public class GameConstants {
 
                 stealingFactor.put(Game.Resources.GOLD, 0.5);
                 stealingFactor.put(Game.Resources.LAND, .025);
-                stealingFactor.put(Game.Resources.POPULATION, .1);
+                stealingFactor.put(Game.Resources.POPULATION, 0.0);
                 stealingFactor.put(Game.Resources.MILITARY, 0.0);
-                stealingFactor.put(Game.Resources.FOOD, 1.0);
+                stealingFactor.put(Game.Resources.FOOD, 2.0);
 
                 populationFoodProduction = 0.5;
                 populationGoldProduction = 0.25;
-                armyFoodConsumption = 1;
-                armyGoldConsumption = 0.1;
-                populationGrowth = 1.07;
+                armyFoodConsumption = .8;
+                armyGoldConsumption = .2;
+                populationGrowth = 1.06;
                 landCapacity = 10;
                 goldForWar = 1600;
                 defendingWave1Multiplier = 2;
-                attackingWave2Multiplier = 2;
+                attackingWave2Multiplier = 1.9;
                 hungerDeathRate = 200;
 
                 maxTurns = 100;

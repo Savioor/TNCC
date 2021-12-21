@@ -3,8 +3,11 @@ package gameengine.actions;
 import gameengine.Game;
 import gameengine.Player;
 import gameengine.actions.reactions.Reaction;
+import gameengine.events.AbstractEvent;
+import gameengine.events.CountdownEvent;
 import gameengine.history.HistoricalAction;
 import gameengine.history.footnotes.Recruit;
+
 import util.Tuple2;
 import util.log.Logger;
 import util.log.NamedLogger;
@@ -47,11 +50,20 @@ public class RecruitAction implements IRespondableAction<Reaction> {
     @Override
     public Tuple2<Boolean, Tuple2<Player, List<String>>> execute(Game game, Player actor) {
         if (actor.getResource(Game.Resources.POPULATION.ordinal()) - toRecruit < 0
-        || actor.getResource(Game.Resources.MILITARY.ordinal()) + toRecruit < 0)
+        || actor.getResource(Game.Resources.MILITARY.ordinal()) + toRecruit < 0 || !actor.canConvert)
             return new Tuple2<>(false, null);
 
-        actor.subtractResource(Game.Resources.POPULATION.ordinal(), toRecruit);
-        actor.addResource(Game.Resources.MILITARY.ordinal(), toRecruit);
+        AbstractEvent ev = new CountdownEvent(game, 2) {
+            @Override
+            protected void action(Game game) {
+                actor.subtractResource(Game.Resources.POPULATION.ordinal(), toRecruit);
+                actor.addResource(Game.Resources.MILITARY.ordinal(), toRecruit);
+                actor.canConvert = true;
+            }
+        };
+        actor.canConvert = false;
+        ev.initialize();
+        game.addEvent(ev);
 
         logger.info(String.format("%s recruited %d military", actor.getName(), toRecruit));
 
