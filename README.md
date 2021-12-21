@@ -29,7 +29,7 @@ citizens will reproduce. Alongside that, if you are out of food some of your cit
 You skip your turn
 #### Recruit
 You convert some of your citizen to army. You can also use this action with negative numbers to convert
-army into citizens. This action is executed instantly (as opposed to at the end of the cycle).
+army into citizens. This action is executed at the end of the _next_ cycle (as opposed to at the end of the cycle).
 #### Trade
 Offer an exchange of resources with another player. One of the resources in the exchange must be
 gold. If the other player agrees then the transaction is performed, otherwise you skip your turn. 

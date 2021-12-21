@@ -38,7 +38,7 @@ public class ConsoleGameRunner {
         ConsoleReactor reactor = new ConsoleReactor(reactions);
         String name;
 
-        players.add(new Player("turtle", new TurtleBot(), new TurtleBot(), true));
+//        players.add(new Player("turtle", new TurtleBot(), new TurtleBot(), true));
 
         while(true){
 

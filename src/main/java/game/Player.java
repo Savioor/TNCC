@@ -16,6 +16,7 @@ public class Player {
     protected IActionGetter actor;
     protected IReActionGetter reactor;
     public final boolean isBot;
+    public boolean canConvert;
 
     public Player(String name, IActionGetter getter, IReActionGetter reactGetter, boolean isBot){
         this.name = name;
@@ -45,6 +46,7 @@ public class Player {
         for (Game.Resources res : Game.Resources.values()){
             resources[res.ordinal()] = game.getConsts().getStartingValue(res);
         }
+        canConvert = true;
     }
 
     public void addResource(int index, int amount){
